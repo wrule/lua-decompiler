@@ -2,21 +2,21 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
-	"os"
 )
 
 func main() {
-	file, err := os.OpenFile("./1.txt", os.O_APPEND|os.O_WRONLY, os.ModeCharDevice)
+	bytes, err := ioutil.ReadFile("./test.json")
 	if err != nil {
-		log.Fatalln(err)
-		return
+		log.Fatalln("文件打开失败")
 	}
-	count, err := file.WriteString("你好")
-	if err != nil {
-		log.Fatalln(err)
-		return
-	}
-	fmt.Println(count)
-	file.Close()
+	jsonText := string(bytes)
+	fmt.Println(jsonText)
+
+	var any interface{}
+	any = []int{1, 2, 3}
+	any = 123
+	any = "空接口可以存储任何数据"
+	fmt.Println(any)
 }
