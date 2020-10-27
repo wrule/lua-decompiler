@@ -2,26 +2,21 @@ package main
 
 import (
 	"fmt"
-
-	"./student"
+	"log"
+	"os"
 )
 
-// Test 测试结构
-type Test struct {
-	name string
-	age  int
-}
-
 func main() {
-	fmt.Print("你好,世界\n")
-	t := Test{"可是\n", 13}
-	stu := student.Student{
-		Name:    "特朗普\n",
-		Sex:     true,
-		Age:     13,
-		Address: "",
-		Remark:  "",
+	file, err := os.OpenFile("./1.txt", os.O_APPEND|os.O_WRONLY, os.ModeCharDevice)
+	if err != nil {
+		log.Fatalln(err)
+		return
 	}
-	fmt.Print(t.name)
-	stu.ShowName()
+	count, err := file.WriteString("你好")
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
+	fmt.Println(count)
+	file.Close()
 }
