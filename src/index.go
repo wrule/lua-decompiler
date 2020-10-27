@@ -20,3 +20,12 @@ func main() {
 	any = "空接口可以存储任何数据"
 	fmt.Println(any)
 }
+
+type PolicyType int32
+
+const (
+	Policy_MIN PolicyType = iota
+	Policy_MAX
+	Policy_MID
+	Policy_AVG
+)
