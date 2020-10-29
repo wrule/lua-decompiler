@@ -6,14 +6,14 @@ import (
 
 // Student 学生
 type Student struct {
-	name string
-	sex  bool
-	age  int
+	Name string `json:"name"`
+	Sex  bool   `json:"sex"`
+	Age  int    `json:"age"`
 }
 
 // SexDesc 性别描述
 func (me *Student) SexDesc() string {
-	if me.sex == true {
+	if me.Sex == true {
 		return "男"
 	}
 	return "女"
@@ -21,7 +21,7 @@ func (me *Student) SexDesc() string {
 
 // ShowMetaInfos 显示基本信息
 func (me *Student) ShowMetaInfos() {
-	fmt.Printf("姓名: %s\n", me.name)
+	fmt.Printf("姓名: %s\n", me.Name)
 	fmt.Printf("性别: %s\n", me.SexDesc())
-	fmt.Printf("年龄: %d\n", me.age)
+	fmt.Printf("年龄: %d\n", me.Age)
 }
