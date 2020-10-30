@@ -1,5 +1,10 @@
 package main
 
+import (
+	"reflect"
+	"regexp"
+)
+
 // JsValue Js值
 type JsValue struct {
 	jsType       EJsType
@@ -25,8 +30,44 @@ func (me *JsValue) ArrayValues() []JsValue {
 // NewJsValue 构造函数
 func NewJsValue(value interface{}) *JsValue {
 	return &JsValue{
-		jsType:       JsUndefined,
+		jsType:       getJsType(value),
 		objectFields: []JsField{},
 		arrayValues:  []JsValue{},
+	}
+}
+
+// jsDateRegexpClosure 用于封装Date正则表达式的闭包函数
+func jsDateRegexpClosure() func() *regexp.Regexp {
+	jsDateRegexp, err := regexp.Compile("^\\d+-\\d+-\\d+T\\d+:\\d+:\\d+.\\d+Z$")
+	if err != nil {
+		panic("正则表达式解析错误")
+	}
+	return func() *regexp.Regexp {
+		return jsDateRegexp
+	}
+}
+
+// getJsType 传入空接口类型的值获取其Js类型
+func getJsType(value interface{}) EJsType {
+	if value == nil {
+		return JsNull
+	}
+	kind := reflect.TypeOf(value).Kind()
+	switch kind {
+	case reflect.Bool:
+		return JsBoolean
+	case reflect.Float64:
+		return JsNumber
+	case reflect.String:
+		if jsDateRegexpClosure()().MatchString(value.(string)) {
+			return JsDate
+		}
+		return JsString
+	case reflect.Map:
+		return JsObject
+	case reflect.Slice:
+		return JsArray
+	default:
+		return JsUnknow
 	}
 }
