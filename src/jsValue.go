@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"reflect"
 	"regexp"
 )
@@ -61,8 +60,8 @@ func getArrayValues(value []interface{}) []*JsValue {
 	var result = make([]*JsValue, arraySize)
 	for index, arrayValue := range value {
 		result[index] = NewJsValue(arrayValue)
+		index++
 	}
-	fmt.Println(result[3].Type())
 	return result
 }
 
