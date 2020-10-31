@@ -20,5 +20,5 @@ func main() {
 
 	var value = js.NewJsValue(jsonObj)
 
-	fmt.Println("结束 ", value.ObjectFields()[0].Value().ObjectFields()[2].Value().ArrayValues()[1].Type())
+	fmt.Println("结束 ", value.Type())
 }
