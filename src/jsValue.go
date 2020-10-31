@@ -31,16 +31,17 @@ func (me *JsValue) ArrayValues() []*JsValue {
 // NewJsValue 构造函数
 func NewJsValue(value interface{}) *JsValue {
 	var jsType = getJsType(value)
+	var objectFields []*JsField
+	var arrayValues []*JsValue
 	if jsType == JsObject {
-		fmt.Println(reflect.TypeOf(value))
-		getObjectFields(value.(map[string]interface{}))
+		objectFields = getObjectFields(value.(map[string]interface{}))
 	} else if jsType == JsArray {
-		fmt.Println(value)
+		arrayValues = getArrayValues(value.([]interface{}))
 	}
 	return &JsValue{
 		jsType:       jsType,
-		objectFields: []*JsField{},
-		arrayValues:  []*JsValue{},
+		objectFields: objectFields,
+		arrayValues:  arrayValues,
 	}
 }
 
@@ -49,16 +50,20 @@ func getObjectFields(value map[string]interface{}) []*JsField {
 	var result = make([]*JsField, mapSize)
 	var index = 0
 	for itemKey, itemValue := range value {
-		fmt.Println(itemKey, itemValue)
 		result[index] = NewJsField(itemKey, NewJsValue(itemValue))
 		index++
 	}
-	fmt.Println(result[0].Name)
 	return result
 }
 
-func getArrayValues() []JsValue {
-	return []JsValue{}
+func getArrayValues(value []interface{}) []*JsValue {
+	var arraySize = len(value)
+	var result = make([]*JsValue, arraySize)
+	for index, arrayValue := range value {
+		result[index] = NewJsValue(arrayValue)
+	}
+	fmt.Println(result[3].Type())
+	return result
 }
 
 // jsDateRegexpClosure 用于封装Date正则表达式的闭包函数

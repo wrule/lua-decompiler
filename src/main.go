@@ -7,10 +7,13 @@ import (
 )
 
 func main() {
-	// fmt.Println("你好世界")
 	var jsonObj map[string]interface{}
 	err := json.Unmarshal([]byte(`{"data":`+`
-null
+{
+	"name": "jimao",
+	"sex": true,
+	"tags": ["3", "2", "1", 1]
+}
 `+`}`), &jsonObj)
 	if err != nil {
 		log.Fatalln("JSON反序列化失败")
@@ -19,5 +22,5 @@ null
 
 	var value = NewJsValue(jsonObj)
 
-	fmt.Println(value.Type())
+	fmt.Println("结束 ", value.ObjectFields()[0].Value().ObjectFields()[2].Value().Type())
 }
