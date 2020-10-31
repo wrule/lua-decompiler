@@ -20,3 +20,11 @@ func (me *JsField) Value() JsValue {
 func (me *JsField) Type() EJsType {
 	return me.value.Type()
 }
+
+// NewJsField 构造函数
+func NewJsField(name string, value JsValue) *JsField {
+	return &JsField{
+		name:  name,
+		value: value,
+	}
+}

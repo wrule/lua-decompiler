@@ -45,7 +45,13 @@ func NewJsValue(value interface{}) *JsValue {
 }
 
 func getObjectFields(value map[string]interface{}) []JsField {
-	return []JsField{}
+	var mapSize = len(value)
+	var result = make([]JsField, mapSize)
+	var index = 0
+	for itemKey, itemValue := range value {
+		result[index] = NewJsField(itemKey, NewJsValue(itemValue))
+	}
+	return result
 }
 
 func getArrayValues() []JsValue {

@@ -35,4 +35,13 @@ null
 	// 		// reflect.TypeOf(value).Kind(),
 	// 	)
 	// }
+
+	var list = make([]int, 10)
+	var newlist = append(list, 1)
+	fmt.Println(list)
+	fmt.Println(newlist)
+	var mymap map[string]int = make(map[string]int)
+	mymap["gu"] = 1
+	mymap["s"] = 2
+	fmt.Println(len(mymap))
 }
