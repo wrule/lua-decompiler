@@ -1,11 +1,9 @@
-package main
+package js
 
 // EJsType Js值的类型枚举
 type EJsType string
 
 const (
-	// JsUndefined Js值 Undefined类型
-	JsUndefined EJsType = "undefined"
 	// JsNull Js值 Null类型
 	JsNull EJsType = "null"
 	// JsBoolean Js值 Boolean类型

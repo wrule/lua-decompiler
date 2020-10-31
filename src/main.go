@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+
+	"./js"
 )
 
 func main() {
@@ -20,7 +22,7 @@ func main() {
 		return
 	}
 
-	var value = NewJsValue(jsonObj)
+	var value = js.NewJsValue(jsonObj)
 
 	fmt.Println("结束 ", value.ObjectFields()[0].Value().ObjectFields()[2].Value().ArrayValues()[1].Type())
 }

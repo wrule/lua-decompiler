@@ -1,52 +1,53 @@
-package main
+package js
 
 import (
 	"reflect"
 	"regexp"
 )
 
-// JsValue Js值
-type JsValue struct {
+// Value Js值
+type Value struct {
 	jsType       EJsType
-	objectFields []*JsField
-	arrayValues  []*JsValue
+	objectFields []*Field
+	arrayValues  []*Value
 }
 
 // Type 获取Js值的类型
-func (me *JsValue) Type() EJsType {
+func (me *Value) Type() EJsType {
 	return me.jsType
 }
 
 // ObjectFields 获取JsObject类型的字段列表
-func (me *JsValue) ObjectFields() []*JsField {
+func (me *Value) ObjectFields() []*Field {
 	return me.objectFields
 }
 
 // ArrayValues 获取JsArray类型的值列表
-func (me *JsValue) ArrayValues() []*JsValue {
+func (me *Value) ArrayValues() []*Value {
 	return me.arrayValues
 }
 
 // NewJsValue 构造函数
-func NewJsValue(value interface{}) *JsValue {
+func NewJsValue(value interface{}) *Value {
 	var jsType = getJsType(value)
-	var objectFields []*JsField
-	var arrayValues []*JsValue
+	var objectFields []*Field
+	var arrayValues []*Value
 	if jsType == JsObject {
 		objectFields = getObjectFields(value.(map[string]interface{}))
 	} else if jsType == JsArray {
 		arrayValues = getArrayValues(value.([]interface{}))
 	}
-	return &JsValue{
+	return &Value{
 		jsType:       jsType,
 		objectFields: objectFields,
 		arrayValues:  arrayValues,
 	}
 }
 
-func getObjectFields(value map[string]interface{}) []*JsField {
+// getObjectFields 获取对象字段列表
+func getObjectFields(value map[string]interface{}) []*Field {
 	var mapSize = len(value)
-	var result = make([]*JsField, mapSize)
+	var result = make([]*Field, mapSize)
 	var index = 0
 	for itemKey, itemValue := range value {
 		result[index] = NewJsField(itemKey, NewJsValue(itemValue))
@@ -55,9 +56,10 @@ func getObjectFields(value map[string]interface{}) []*JsField {
 	return result
 }
 
-func getArrayValues(value []interface{}) []*JsValue {
+// getArrayValues 获取数组值列表
+func getArrayValues(value []interface{}) []*Value {
 	var arraySize = len(value)
-	var result = make([]*JsValue, arraySize)
+	var result = make([]*Value, arraySize)
 	for index, arrayValue := range value {
 		result[index] = NewJsValue(arrayValue)
 		index++
