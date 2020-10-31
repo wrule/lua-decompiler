@@ -3,7 +3,7 @@ package main
 // JsField Js字段
 type JsField struct {
 	name  string
-	value JsValue
+	value *JsValue
 }
 
 // Name 获取Js字段名称
@@ -12,7 +12,7 @@ func (me *JsField) Name() string {
 }
 
 // Value 获取Js字段值
-func (me *JsField) Value() JsValue {
+func (me *JsField) Value() *JsValue {
 	return me.value
 }
 
@@ -22,7 +22,7 @@ func (me *JsField) Type() EJsType {
 }
 
 // NewJsField 构造函数
-func NewJsField(name string, value JsValue) *JsField {
+func NewJsField(name string, value *JsValue) *JsField {
 	return &JsField{
 		name:  name,
 		value: value,

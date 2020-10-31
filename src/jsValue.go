@@ -9,8 +9,8 @@ import (
 // JsValue Js值
 type JsValue struct {
 	jsType       EJsType
-	objectFields []JsField
-	arrayValues  []JsValue
+	objectFields []*JsField
+	arrayValues  []*JsValue
 }
 
 // Type 获取Js值的类型
@@ -19,12 +19,12 @@ func (me *JsValue) Type() EJsType {
 }
 
 // ObjectFields 获取JsObject类型的字段列表
-func (me *JsValue) ObjectFields() []JsField {
+func (me *JsValue) ObjectFields() []*JsField {
 	return me.objectFields
 }
 
 // ArrayValues 获取JsArray类型的值列表
-func (me *JsValue) ArrayValues() []JsValue {
+func (me *JsValue) ArrayValues() []*JsValue {
 	return me.arrayValues
 }
 
@@ -39,18 +39,21 @@ func NewJsValue(value interface{}) *JsValue {
 	}
 	return &JsValue{
 		jsType:       jsType,
-		objectFields: []JsField{},
-		arrayValues:  []JsValue{},
+		objectFields: []*JsField{},
+		arrayValues:  []*JsValue{},
 	}
 }
 
-func getObjectFields(value map[string]interface{}) []JsField {
+func getObjectFields(value map[string]interface{}) []*JsField {
 	var mapSize = len(value)
-	var result = make([]JsField, mapSize)
+	var result = make([]*JsField, mapSize)
 	var index = 0
 	for itemKey, itemValue := range value {
+		fmt.Println(itemKey, itemValue)
 		result[index] = NewJsField(itemKey, NewJsValue(itemValue))
+		index++
 	}
+	fmt.Println(result[0].Name)
 	return result
 }
 
