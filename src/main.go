@@ -9,26 +9,15 @@ import (
 func main() {
 	// fmt.Println("你好世界")
 	var jsonObj map[string]interface{}
-	err := json.Unmarshal([]byte(`
-{
-	"name": "nihao",
-	"sex": true,
-	"age": 13,
-	"tags": ["c", "c++", "go", 1, {}],
-	"meta": {
-		"num": 13,
-		"keys": [true, false, true]
-	},
-	"date":"2020-10-30T15:59:27.225Z",
-	"ssss": null
-}
-`), &jsonObj)
+	err := json.Unmarshal([]byte(`{"data":`+`
+null
+`+`}`), &jsonObj)
 	if err != nil {
 		log.Fatalln("JSON反序列化失败")
 		return
 	}
 
-	value := NewJsValue(jsonObj)
+	var value = NewJsValue(jsonObj)
 
 	fmt.Println(value.Type())
 

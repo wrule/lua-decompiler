@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"reflect"
 	"regexp"
 )
@@ -29,11 +30,26 @@ func (me *JsValue) ArrayValues() []JsValue {
 
 // NewJsValue 构造函数
 func NewJsValue(value interface{}) *JsValue {
+	var jsType = getJsType(value)
+	if jsType == JsObject {
+		fmt.Println(reflect.TypeOf(value))
+		getObjectFields(value.(map[string]interface{}))
+	} else if jsType == JsArray {
+		fmt.Println(value)
+	}
 	return &JsValue{
-		jsType:       getJsType(value),
+		jsType:       jsType,
 		objectFields: []JsField{},
 		arrayValues:  []JsValue{},
 	}
+}
+
+func getObjectFields(value map[string]interface{}) []JsField {
+	return []JsField{}
+}
+
+func getArrayValues() []JsValue {
+	return []JsValue{}
 }
 
 // jsDateRegexpClosure 用于封装Date正则表达式的闭包函数
