@@ -16,4 +16,12 @@ const (
 	TStructString ETStructType = "String"
 	// TStructDate Date类型结构
 	TStructDate ETStructType = "Date"
+	// TStructObject Object类型结构
+	TStructObject ETStructType = "Object"
+	// TStructArray Array类型结构
+	TStructArray ETStructType = "Array"
+	// TStructTuple Tuple类型结构
+	TStructTuple ETStructType = "Tuple"
+	// TStructUnion Union类型结构
+	TStructUnion ETStructType = "Union"
 )
