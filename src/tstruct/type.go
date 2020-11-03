@@ -4,8 +4,16 @@ package tstruct
 type ETStructType string
 
 const (
-	// TStructNull s
+	// TStructNull Null类型结构
 	TStructNull ETStructType = "Null"
-	// TStructUndefined s
+	// TStructUndefined Undefined类型结构
 	TStructUndefined ETStructType = "Undefined"
+	// TStructBoolean 布尔类型结构
+	TStructBoolean ETStructType = "Boolean"
+	// TStructNumber Number类型结构
+	TStructNumber ETStructType = "Number"
+	// TStructString String类型结构
+	TStructString ETStructType = "String"
+	// TStructDate Date类型结构
+	TStructDate ETStructType = "Date"
 )
