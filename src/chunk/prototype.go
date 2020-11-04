@@ -10,7 +10,9 @@ type Prototype struct {
 	maxStackSize    byte
 	code            []uint32
 	constants       []interface{}
+	upvalues        []Upvalue
 	protos          []*Prototype
 	lineInfo        []uint32
+	locVars         []LocVar
 	upvalueNames    []string
 }
