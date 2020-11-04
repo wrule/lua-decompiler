@@ -65,3 +65,8 @@ func (me *Reader) ReadBytes(size uint64) ([]byte, error) {
 	count, err := me.reader.Read(bytes)
 	return bytes[:count], err
 }
+
+// NewReader 构造函数
+func NewReader(reader io.Reader) *Reader {
+	return &Reader{reader}
+}
