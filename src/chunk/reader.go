@@ -52,6 +52,7 @@ func (me *Reader) ReadString() (string, error) {
 		return "", err
 	}
 	if size == 0xFF {
+		// 这个err被放弃了
 		size, err = me.ReadUint64()
 	}
 	bytes, err := me.ReadBytes(size)
