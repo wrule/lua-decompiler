@@ -66,6 +66,64 @@ func (me *Reader) ReadBytes(size uint64) ([]byte, error) {
 	return bytes[:count], err
 }
 
+// ReadCodes 读取Lua虚拟机指令
+func (me *Reader) ReadCodes() []uint32 {
+	size, _ := me.ReadUint32()
+	codes := make([]uint32, size)
+	for index := range codes {
+		codes[index], _ = me.ReadUint32()
+	}
+	return codes
+}
+
+// ReadConstant 读取常量
+func (me *Reader) ReadConstant() interface{} {
+	ctype, _ := me.ReadByte()
+	switch ctype {
+	case TagNil:
+		return nil
+	case TagBoolean:
+		res, _ := me.ReadByte()
+		return res != 0x00
+	case TagNumber:
+		res, _ := me.ReadLuaNumber()
+		return res
+	case TagInteger:
+		res, _ := me.ReadLuaInteger()
+		return res
+	case TagShortStr:
+		res, _ := me.ReadString()
+		return res
+	case TagLongStr:
+		res, _ := me.ReadString()
+		return res
+	default:
+		panic("常量类型解析错误")
+	}
+}
+
+// ReadConstants 读取常量列表
+func (me *Reader) ReadConstants() []interface{} {
+	size, _ := me.ReadUint32()
+	constants := make([]interface{}, size)
+	for index := range constants {
+		constants[index] = me.ReadConstant()
+	}
+	return constants
+}
+
+// ReadUpvalues 读取Upvalues列表
+func (me *Reader) ReadUpvalues() []Upvalue {
+	size, _ := me.ReadUint32()
+	upvalues := make([]Upvalue, size)
+	for index := range upvalues {
+		instack, _ := me.ReadByte()
+		idx, _ := me.ReadByte()
+		upvalues[index] = Upvalue{instack, idx}
+	}
+	return upvalues
+}
+
 // NewReader 构造函数
 func NewReader(reader io.Reader) *Reader {
 	return &Reader{reader}
