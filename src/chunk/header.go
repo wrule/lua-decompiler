@@ -43,110 +43,77 @@ const (
 // CheckLoad 从Reader中检查并加载Header
 func (me *Header) CheckLoad(reader *Reader) {
 	{
-		res, err := reader.ReadBytes(4)
-		if err != nil {
-			panic("读取Lua签名失败")
-		}
+		res := reader.ReadBytes(4)
 		if string(res) != LuaSignature {
 			panic("文件没有有效的Lua签名")
 		}
 		copy(me.signature[:], res)
 	}
 	{
-		res, err := reader.ReadByte()
-		if err != nil {
-			panic("读取Luac版本失败")
-		}
+		res := reader.ReadByte()
 		if res != LuacVersion {
 			panic("Luac版本校验失败")
 		}
 		me.version = res
 	}
 	{
-		res, err := reader.ReadByte()
-		if err != nil {
-			panic("读取Luac格式数字失败")
-		}
+		res := reader.ReadByte()
 		if res != LuacFormat {
 			panic("Luac格式数字校验失败")
 		}
 		me.format = res
 	}
 	{
-		res, err := reader.ReadBytes(6)
-		if err != nil {
-			panic("读取Luac验证数据失败")
-		}
+		res := reader.ReadBytes(6)
 		if string(res) != LuacData {
 			panic("文件没有有效的Luac验证数据")
 		}
 		copy(me.luacData[:], res)
 	}
 	{
-		res, err := reader.ReadByte()
-		if err != nil {
-			panic("读取cint宽度失败")
-		}
+		res := reader.ReadByte()
 		if res != CIntSize {
 			panic("cint宽度校验失败")
 		}
 		me.cintSize = res
 	}
 	{
-		res, err := reader.ReadByte()
-		if err != nil {
-			panic("读取sizetSize宽度失败")
-		}
+		res := reader.ReadByte()
 		if res != SizeTSize {
 			panic("sizetSize宽度校验失败")
 		}
 		me.sizetSize = res
 	}
 	{
-		res, err := reader.ReadByte()
-		if err != nil {
-			panic("读取指令宽度失败")
-		}
+		res := reader.ReadByte()
 		if res != InstructionSize {
 			panic("指令宽度校验失败")
 		}
 		me.instructionSize = res
 	}
 	{
-		res, err := reader.ReadByte()
-		if err != nil {
-			panic("读取LuaInteger宽度失败")
-		}
+		res := reader.ReadByte()
 		if res != LuaIntegerSize {
 			panic("LuaInteger宽度校验失败")
 		}
 		me.luaIntegerSize = res
 	}
 	{
-		res, err := reader.ReadByte()
-		if err != nil {
-			panic("读取LuaNumber宽度失败")
-		}
+		res := reader.ReadByte()
 		if res != LuaNumberSize {
 			panic("LuaNumber宽度校验失败")
 		}
 		me.luaNumberSize = res
 	}
 	{
-		res, err := reader.ReadLuaInteger()
-		if err != nil {
-			panic("读取Luac整数验证数字失败")
-		}
+		res := reader.ReadLuaInteger()
 		if res != LuacInt {
 			panic("Luac整数验证数字校验失败")
 		}
 		me.luacInt = res
 	}
 	{
-		res, err := reader.ReadLuaNumber()
-		if err != nil {
-			panic("读取Luac浮点数验证数字失败")
-		}
+		res := reader.ReadLuaNumber()
 		if res != LuacNum {
 			panic("Luac浮点数验证数字校验失败")
 		}

@@ -21,10 +21,7 @@ func main() {
 
 	header.CheckLoad(reader)
 
-	res, err := reader.ReadUint32()
-	if err != nil {
-		return
-	}
+	res := reader.ReadUint32()
 	fmt.Println(res)
 
 	// 1B 4C 75 61
