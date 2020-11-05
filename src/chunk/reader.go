@@ -143,11 +143,11 @@ func (me *Reader) ReadPrototype(parentSource string) *Prototype {
 		numParams:       me.ReadByte(),
 		isVararg:        me.ReadByte(),
 		maxStackSize:    me.ReadByte(),
-		code:            me.ReadCodes(),
+		codes:           me.ReadCodes(),
 		constants:       me.ReadConstants(),
 		upvalues:        me.ReadUpvalues(),
 		protos:          me.ReadPrototypes(parentSource),
-		lineInfo:        me.ReadLineInfos(),
+		lineInfos:       me.ReadLineInfos(),
 		locVars:         me.ReadLocVars(),
 		upvalueNames:    me.ReadUpvalueNames(),
 	}

@@ -8,11 +8,11 @@ type Prototype struct {
 	numParams       byte
 	isVararg        byte
 	maxStackSize    byte
-	code            []uint32
+	codes           []uint32
 	constants       []interface{}
 	upvalues        []Upvalue
 	protos          []*Prototype
-	lineInfo        []uint32
+	lineInfos       []uint32
 	locVars         []LocVar
 	upvalueNames    []string
 }
