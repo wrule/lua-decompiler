@@ -7,6 +7,21 @@ type Chunk struct {
 	mainFunc         *Prototype
 }
 
+// Header 获取头部信息
+func (me *Chunk) Header() Header {
+	return me.header
+}
+
+// SizeUpdatevalues 获取SizeUpdatevalues
+func (me *Chunk) SizeUpdatevalues() byte {
+	return me.sizeUpdatevalues
+}
+
+// MainFunc 获取主函数
+func (me *Chunk) MainFunc() *Prototype {
+	return me.mainFunc
+}
+
 // CheckLoad 校验并加载Chunk
 func (me *Chunk) CheckLoad(reader *Reader) {
 	me.header.CheckLoad(reader)

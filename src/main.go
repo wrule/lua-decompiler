@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -19,6 +20,8 @@ func main() {
 	var ck chunk.Chunk
 
 	ck.CheckLoad(reader)
+
+	fmt.Println(ck.MainFunc().Source())
 
 	file.Close()
 }
