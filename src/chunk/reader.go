@@ -77,7 +77,7 @@ func (me *Reader) ReadString() string {
 	if size == 0xFF {
 		size = me.ReadUint64()
 	}
-	bytes := me.ReadBytes(size)
+	bytes := me.ReadBytes(size - 1)
 	return string(bytes)
 }
 
