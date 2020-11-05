@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -17,15 +16,9 @@ func main() {
 
 	var reader = chunk.NewReader(file)
 
-	var header chunk.Header
+	var ck chunk.Chunk
 
-	header.CheckLoad(reader)
-
-	res := reader.ReadUint32()
-	fmt.Println(res)
-
-	// 1B 4C 75 61
-	// 27 76 117 97
+	ck.CheckLoad(reader)
 
 	file.Close()
 }
