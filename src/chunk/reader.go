@@ -12,7 +12,7 @@ type Reader struct {
 }
 
 func readError(err error) {
-	panic("文件读取错误")
+	panic("读取chunk出现错误")
 }
 
 // ReadByte 读取一个字节
