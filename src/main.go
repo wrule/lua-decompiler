@@ -21,7 +21,7 @@ func main() {
 
 	ck.CheckLoad(reader)
 
-	fmt.Println(ck.MainFunc().Source())
+	fmt.Println(ck.MainFunc().UpvalueNames())
 
 	file.Close()
 }
