@@ -134,6 +134,69 @@ func (me *Reader) ReadUpvalues() []Upvalue {
 	return upvalues
 }
 
+// ReadPrototype 读取函数原型
+func (me *Reader) ReadPrototype(parentSource string) *Prototype {
+	return &Prototype{
+		source:          me.ReadString(),
+		lineDefined:     me.ReadUint32(),
+		lastLineDefined: me.ReadUint32(),
+		numParams:       me.ReadByte(),
+		isVararg:        me.ReadByte(),
+		maxStackSize:    me.ReadByte(),
+		code:            me.ReadCodes(),
+		constants:       me.ReadConstants(),
+		upvalues:        me.ReadUpvalues(),
+		protos:          me.ReadPrototypes(parentSource),
+		lineInfo:        me.ReadLineInfos(),
+		locVars:         me.ReadLocVars(),
+		upvalueNames:    me.ReadUpvalueNames(),
+	}
+}
+
+// ReadPrototypes 读取函数原型列表
+func (me *Reader) ReadPrototypes(parentSource string) []*Prototype {
+	size := me.ReadUint32()
+	protos := make([]*Prototype, size)
+	for index := range protos {
+		protos[index] = me.ReadPrototype(parentSource)
+	}
+	return protos
+}
+
+// ReadLineInfos 读取行号表
+func (me *Reader) ReadLineInfos() []uint32 {
+	size := me.ReadUint32()
+	lineInfos := make([]uint32, size)
+	for index := range lineInfos {
+		lineInfos[index] = me.ReadUint32()
+	}
+	return lineInfos
+}
+
+// ReadLocVars 读取本地变量列表
+func (me *Reader) ReadLocVars() []LocVar {
+	size := me.ReadUint32()
+	locVars := make([]LocVar, size)
+	for index := range locVars {
+		locVars[index] = LocVar{
+			varName: me.ReadString(),
+			startPC: me.ReadUint32(),
+			endPC:   me.ReadUint32(),
+		}
+	}
+	return locVars
+}
+
+// ReadUpvalueNames 读取Upvalue名称列表
+func (me *Reader) ReadUpvalueNames() []string {
+	size := me.ReadUint32()
+	names := make([]string, size)
+	for index := range names {
+		names[index] = me.ReadString()
+	}
+	return names
+}
+
 // NewReader 构造函数
 func NewReader(reader io.Reader) *Reader {
 	return &Reader{reader}

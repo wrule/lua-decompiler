@@ -16,16 +16,3 @@ type Prototype struct {
 	locVars         []LocVar
 	upvalueNames    []string
 }
-
-// CheckLoad 加载函数原型
-func (me *Prototype) CheckLoad(reader Reader, parentSource string) {
-	me.source = reader.ReadString()
-	me.lineDefined = reader.ReadUint32()
-	me.lastLineDefined = reader.ReadUint32()
-	me.numParams = reader.ReadByte()
-	me.isVararg = reader.ReadByte()
-	me.maxStackSize = reader.ReadByte()
-	me.code = reader.ReadCodes()
-	me.constants = reader.ReadConstants()
-	me.upvalues = reader.ReadUpvalues()
-}
