@@ -1,5 +1,7 @@
 package chunk
 
+import "fmt"
+
 // Prototype 函数原型
 type Prototype struct {
 	source          string
@@ -80,4 +82,33 @@ func (me *Prototype) LocVars() []LocVar {
 // UpvalueNames 获取Upvalue名列表
 func (me *Prototype) UpvalueNames() []string {
 	return me.upvalueNames
+}
+
+// List 输出函数原型信息
+func (me *Prototype) List() {
+	fmt.Printf(
+		"<文件名: %s [%d:%d]> (%d 个指令)\n",
+		me.Source(),
+		me.LineDefined(),
+		me.LastLineDefined(),
+		len(me.Codes()),
+	)
+	varargFlag := ""
+	if me.IsVararg() > 0 {
+		varargFlag = "+"
+	}
+	fmt.Printf(
+		"参数个数: %d%s  寄存器数量: %d  Upvalue数量: %d  局部变量数量: %d  常量数量: %d  子函数数量: %d\n",
+		me.NumParams(),
+		varargFlag,
+		me.MaxStackSize(),
+		len(me.Upvalues()),
+		len(me.LocVars()),
+		len(me.Constants()),
+		len(me.Prototypes()),
+	)
+
+	for index, code := range me.Codes() {
+		fmt.Printf("\t%d\t[%d]\t0x%08X\n", index+1, me.LineInfos()[index], code)
+	}
 }

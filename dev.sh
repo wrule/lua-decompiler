@@ -1,3 +1,3 @@
 #!/bin/bash
 clear
-go run ./src
+go run ./src ./test/1.out

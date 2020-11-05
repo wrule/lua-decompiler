@@ -28,3 +28,8 @@ func (me *Chunk) CheckLoad(reader *Reader) {
 	me.sizeUpdatevalues = reader.ReadByte()
 	me.mainFunc = reader.ReadPrototype("")
 }
+
+// List 输出Chunk信息
+func (me *Chunk) List() {
+	me.MainFunc().List()
+}
