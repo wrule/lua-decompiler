@@ -11,13 +11,14 @@ type Reader struct {
 	reader io.Reader
 }
 
+// readError 用于错误处理
 func readError(err error) {
 	panic("读取chunk出现错误")
 }
 
 // ReadByte 读取一个字节
 func (me *Reader) ReadByte() byte {
-	var bytes []byte = make([]byte, 1)
+	var bytes = make([]byte, 1)
 	_, err := me.reader.Read(bytes)
 	if err != nil {
 		readError(err)
@@ -27,7 +28,7 @@ func (me *Reader) ReadByte() byte {
 
 // ReadBytes 读取字节数组
 func (me *Reader) ReadBytes(size uint64) []byte {
-	var bytes []byte = make([]byte, size)
+	var bytes = make([]byte, size)
 	count, err := me.reader.Read(bytes)
 	if err != nil {
 		readError(err)
@@ -37,7 +38,7 @@ func (me *Reader) ReadBytes(size uint64) []byte {
 
 // ReadUint32 读取一个uint32
 func (me *Reader) ReadUint32() uint32 {
-	var bytes []byte = make([]byte, 4)
+	var bytes = make([]byte, 4)
 	_, err := me.reader.Read(bytes)
 	if err != nil {
 		readError(err)
@@ -47,7 +48,7 @@ func (me *Reader) ReadUint32() uint32 {
 
 // ReadUint64 读取一个uint64
 func (me *Reader) ReadUint64() uint64 {
-	var bytes []byte = make([]byte, 8)
+	var bytes = make([]byte, 8)
 	_, err := me.reader.Read(bytes)
 	if err != nil {
 		readError(err)
