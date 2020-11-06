@@ -129,7 +129,7 @@ func (me *Prototype) ListLocVars() []string {
 	lines[0] = fmt.Sprintf("局部变量数: (%d)", locVarNum)
 	for index, locVar := range me.LocVars() {
 		pindex := index + 1
-		lines[index] = fmt.Sprintf(
+		lines[pindex] = fmt.Sprintf(
 			"\t%d\t%s\tStartPC: %d\tEndPC: %d",
 			pindex,
 			locVar.VarName(),
@@ -164,6 +164,7 @@ func (me *Prototype) ListUpvalues() []string {
 
 // List 输出函数原型信息
 func (me *Prototype) List() {
+	color.Green("--开始------------")
 	fmt.Printf(
 		"<文件名: %s [%d:%d]> (%d 个指令)\n",
 		me.Source(),
@@ -185,25 +186,30 @@ func (me *Prototype) List() {
 		len(me.Constants()),
 		len(me.Prototypes()),
 	)
-
-	for _, line := range me.ListCodes() {
-		fmt.Println(line)
+	{
+		for _, line := range me.ListCodes() {
+			fmt.Println(line)
+		}
 	}
-
-	for _, line := range me.ListConstants() {
-		fmt.Println(line)
+	{
+		for _, line := range me.ListConstants() {
+			fmt.Println(line)
+		}
 	}
-
-	for _, line := range me.ListLocVars() {
-		fmt.Println(line)
+	{
+		for _, line := range me.ListLocVars() {
+			fmt.Println(line)
+		}
 	}
-
-	for _, line := range me.ListUpvalues() {
-		fmt.Println(line)
+	{
+		for _, line := range me.ListUpvalues() {
+			fmt.Println(line)
+		}
 	}
-
-	for _, proto := range me.Prototypes() {
-		proto.List()
+	{
+		for _, proto := range me.Prototypes() {
+			proto.List()
+		}
 	}
-	color.Green("结束，颜色测试")
+	color.Green("--结束------------")
 }
