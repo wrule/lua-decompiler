@@ -15,7 +15,7 @@ type Prototype struct {
 	isVararg        byte
 	maxStackSize    byte
 	codes           []uint32
-	constants       []interface{}
+	constants       []Constant
 	upvalues        []Upvalue
 	protos          []*Prototype
 	lineInfos       []uint32
@@ -59,7 +59,7 @@ func (me *Prototype) Codes() []uint32 {
 }
 
 // Constants 获取常量表
-func (me *Prototype) Constants() []interface{} {
+func (me *Prototype) Constants() []Constant {
 	return me.constants
 }
 
@@ -110,9 +110,9 @@ func (me *Prototype) ListConstants() []string {
 	var constantNum = len(me.Constants())
 	var lines = make([]string, constantNum+1)
 	lines[0] = fmt.Sprintf("常量数: %d", constantNum)
-	for index := range lines[1:] {
+	for index, constant := range me.Constants() {
 		pindex := index + 1
-		lines[pindex] = fmt.Sprintf("\t%d\t", pindex)
+		lines[pindex] = fmt.Sprintf("\t%d\t%s", pindex, constant)
 	}
 	return lines
 }

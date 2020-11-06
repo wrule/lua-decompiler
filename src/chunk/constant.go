@@ -1,5 +1,8 @@
 package chunk
 
+// Constant 常量空接口
+type Constant interface{}
+
 const (
 	// TagNil nil常量类型
 	TagNil = 0x00

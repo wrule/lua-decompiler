@@ -92,7 +92,7 @@ func (me *Reader) ReadCodes() []uint32 {
 }
 
 // ReadConstant 读取常量
-func (me *Reader) ReadConstant() interface{} {
+func (me *Reader) ReadConstant() Constant {
 	ctype := me.ReadByte()
 	switch ctype {
 	case TagNil:
@@ -113,9 +113,9 @@ func (me *Reader) ReadConstant() interface{} {
 }
 
 // ReadConstants 读取常量列表
-func (me *Reader) ReadConstants() []interface{} {
+func (me *Reader) ReadConstants() []Constant {
 	size := me.ReadUint32()
-	constants := make([]interface{}, size)
+	constants := make([]Constant, size)
 	for index := range constants {
 		constants[index] = me.ReadConstant()
 	}
