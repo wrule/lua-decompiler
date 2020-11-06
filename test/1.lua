@@ -9,4 +9,7 @@ end
 
 print("你好世界")
 
-print(add(1, 3))
+a = 1
+b = 2
+
+print(add(a, b))

@@ -96,7 +96,7 @@ func (me *Prototype) ListCodes() []string {
 	for index, code := range me.Codes() {
 		pindex := index + 1
 		lines[pindex] = fmt.Sprintf(
-			"\t%d\t[%d]\t0x%08X",
+			"\t%d.\t[%d]\t0x%08X",
 			pindex,
 			me.LineInfos()[index],
 			code,
@@ -139,9 +139,19 @@ func (me *Prototype) ListUpvalues() []string {
 	var upvalueNum = len(me.Upvalues())
 	var lines = make([]string, upvalueNum+1)
 	lines[0] = fmt.Sprintf("Upvalue数: %d", upvalueNum)
-	for index := range lines[1:] {
+	for index, upvalue := range me.Upvalues() {
 		pindex := index + 1
-		lines[pindex] = fmt.Sprintf("\t%d\t", pindex)
+		var upvalueName string = ""
+		if index < len(me.UpvalueNames()) {
+			upvalueName = me.UpvalueNames()[index]
+		}
+		lines[pindex] = fmt.Sprintf(
+			"\t%d.\t%s\tInstack: %d\tIdx: %d",
+			pindex,
+			upvalueName,
+			upvalue.Instack(),
+			upvalue.Idx(),
+		)
 	}
 	return lines
 }
