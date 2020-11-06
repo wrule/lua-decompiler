@@ -1,6 +1,10 @@
 package chunk
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/fatih/color"
+)
 
 // Prototype 函数原型
 type Prototype struct {
@@ -84,6 +88,59 @@ func (me *Prototype) UpvalueNames() []string {
 	return me.upvalueNames
 }
 
+// ListCodes 指令列表信息
+func (me *Prototype) ListCodes() []string {
+	var codeNum = len(me.Codes())
+	var lines = make([]string, codeNum+1)
+	lines[0] = fmt.Sprintf("指令数: %d", codeNum)
+	for index, code := range me.Codes() {
+		pindex := index + 1
+		lines[pindex] = fmt.Sprintf(
+			"\t%d\t[%d]\t0x%08X",
+			pindex,
+			me.LineInfos()[index],
+			code,
+		)
+	}
+	return lines
+}
+
+// ListConstants 打印常量列表
+func (me *Prototype) ListConstants() []string {
+	var constantNum = len(me.Constants())
+	var lines = make([]string, constantNum+1)
+	lines[0] = fmt.Sprintf("常量数: %d", constantNum)
+	for index := range lines[1:] {
+		pindex := index + 1
+		lines[pindex] = fmt.Sprintf("\t%d\t", pindex)
+	}
+	return lines
+}
+
+// ListLocVars 局部变量信息
+func (me *Prototype) ListLocVars() []string {
+	var locVarNum = len(me.LocVars())
+	var lines = make([]string, locVarNum+1)
+	lines[0] = fmt.Sprintf("局部变量数: %d", locVarNum)
+	for index := range lines[1:] {
+		pindex := index + 1
+		lines[index] = fmt.Sprintf("\t%d\t", pindex)
+	}
+	return lines
+}
+
+// ListUpvalues Upvalue信息
+func (me *Prototype) ListUpvalues() []string {
+	var upvalueNum = len(me.Upvalues())
+	var lines = make([]string, upvalueNum+1)
+	lines[0] = fmt.Sprintf("Upvalue数: %d", upvalueNum)
+	for index := range lines[1:] {
+		pindex := index + 1
+		lines[pindex] = fmt.Sprintf("\t%d\t", pindex)
+	}
+	return lines
+}
+
 // List 输出函数原型信息
 func (me *Prototype) List() {
 	fmt.Printf(
@@ -108,7 +165,21 @@ func (me *Prototype) List() {
 		len(me.Prototypes()),
 	)
 
-	for index, code := range me.Codes() {
-		fmt.Printf("\t%d\t[%d]\t0x%08X\n", index+1, me.LineInfos()[index], code)
+	for _, line := range me.ListCodes() {
+		fmt.Println(line)
 	}
+
+	for _, line := range me.ListConstants() {
+		fmt.Println(line)
+	}
+
+	for _, line := range me.ListLocVars() {
+		fmt.Println(line)
+	}
+
+	for _, line := range me.ListUpvalues() {
+		fmt.Println(line)
+	}
+
+	color.Green("结束，颜色测试")
 }
