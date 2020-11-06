@@ -202,5 +202,8 @@ func (me *Prototype) List() {
 		fmt.Println(line)
 	}
 
+	for _, proto := range me.Prototypes() {
+		proto.List()
+	}
 	color.Green("结束，颜色测试")
 }
