@@ -112,7 +112,12 @@ func (me *Prototype) ListConstants() []string {
 	lines[0] = fmt.Sprintf("常量数: %d", constantNum)
 	for index, constant := range me.Constants() {
 		pindex := index + 1
-		lines[pindex] = fmt.Sprintf("\t%d\t%s", pindex, constant)
+		lines[pindex] = fmt.Sprintf(
+			"\t%d.\t%s : %s",
+			pindex,
+			constant.ValueString(),
+			constant.TypeString(),
+		)
 	}
 	return lines
 }

@@ -1,5 +1,7 @@
 package chunk
 
+import "fmt"
+
 // Constant 常量空接口
 type Constant struct {
 	ctype EConstantType
@@ -16,9 +18,44 @@ func (me *Constant) Value() interface{} {
 	return me.value
 }
 
+// TypeString 常量类型的字符串描述
+func (me *Constant) TypeString() string {
+	switch me.Type() {
+	case ConstantTypeNil:
+		return "nil"
+	case ConstantTypeBoolean:
+		return "bool"
+	case ConstantTypeNumber:
+		return "number"
+	case ConstantTypeInteger:
+		return "integer"
+	case ConstantTypeShortStr:
+		return "short_string"
+	case ConstantTypeLongStr:
+		return "long_string"
+	default:
+		return ""
+	}
+}
+
 // ValueString 常量的值用字符串形式表达
 func (me *Constant) ValueString() string {
-	return ""
+	switch me.Type() {
+	case ConstantTypeNil:
+		return "nil"
+	case ConstantTypeBoolean:
+		return fmt.Sprintf("%t", me.Value())
+	case ConstantTypeNumber:
+		return fmt.Sprintf("%g", me.Value())
+	case ConstantTypeInteger:
+		return fmt.Sprintf("%d", me.Value())
+	case ConstantTypeShortStr:
+		return me.Value().(string)
+	case ConstantTypeLongStr:
+		return me.Value().(string)
+	default:
+		return ""
+	}
 }
 
 // EConstantType Lua常量类型枚举

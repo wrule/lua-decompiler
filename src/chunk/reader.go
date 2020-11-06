@@ -93,20 +93,20 @@ func (me *Reader) ReadCodes() []uint32 {
 
 // ReadConstant 读取常量
 func (me *Reader) ReadConstant() Constant {
-	ctype := me.ReadByte()
+	ctype := EConstantType(me.ReadByte())
 	switch ctype {
-	case TagNil:
-		return nil
-	case TagBoolean:
-		return me.ReadByte() != 0x00
-	case TagNumber:
-		return me.ReadLuaNumber()
-	case TagInteger:
-		return me.ReadLuaInteger()
-	case TagShortStr:
-		return me.ReadString()
-	case TagLongStr:
-		return me.ReadString()
+	case ConstantTypeNil:
+		return Constant{ConstantTypeNil, nil}
+	case ConstantTypeBoolean:
+		return Constant{ConstantTypeBoolean, me.ReadByte() != 0x00}
+	case ConstantTypeNumber:
+		return Constant{ConstantTypeNumber, me.ReadLuaNumber()}
+	case ConstantTypeInteger:
+		return Constant{ConstantTypeInteger, me.ReadLuaInteger()}
+	case ConstantTypeShortStr:
+		return Constant{ConstantTypeShortStr, me.ReadString()}
+	case ConstantTypeLongStr:
+		return Constant{ConstantTypeLongStr, me.ReadString()}
 	default:
 		panic("常量类型解析错误")
 	}
