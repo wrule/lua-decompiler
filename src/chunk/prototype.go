@@ -115,8 +115,8 @@ func (me *Prototype) ListConstants() []string {
 		lines[pindex] = fmt.Sprintf(
 			"\t%d.\t%s : %s",
 			pindex,
-			constant.ValueString(),
 			constant.TypeString(),
+			constant.ValueString(),
 		)
 	}
 	return lines
