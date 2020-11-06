@@ -92,7 +92,7 @@ func (me *Prototype) UpvalueNames() []string {
 func (me *Prototype) ListCodes() []string {
 	var codeNum = len(me.Codes())
 	var lines = make([]string, codeNum+1)
-	lines[0] = fmt.Sprintf("指令数: %d", codeNum)
+	lines[0] = fmt.Sprintf("指令数: (%d)", codeNum)
 	for index, code := range me.Codes() {
 		pindex := index + 1
 		lines[pindex] = fmt.Sprintf(
@@ -109,7 +109,7 @@ func (me *Prototype) ListCodes() []string {
 func (me *Prototype) ListConstants() []string {
 	var constantNum = len(me.Constants())
 	var lines = make([]string, constantNum+1)
-	lines[0] = fmt.Sprintf("常量数: %d", constantNum)
+	lines[0] = fmt.Sprintf("常量数: (%d)", constantNum)
 	for index, constant := range me.Constants() {
 		pindex := index + 1
 		lines[pindex] = fmt.Sprintf(
@@ -126,10 +126,16 @@ func (me *Prototype) ListConstants() []string {
 func (me *Prototype) ListLocVars() []string {
 	var locVarNum = len(me.LocVars())
 	var lines = make([]string, locVarNum+1)
-	lines[0] = fmt.Sprintf("局部变量数: %d", locVarNum)
-	for index := range lines[1:] {
+	lines[0] = fmt.Sprintf("局部变量数: (%d)", locVarNum)
+	for index, locVar := range me.LocVars() {
 		pindex := index + 1
-		lines[index] = fmt.Sprintf("\t%d\t", pindex)
+		lines[index] = fmt.Sprintf(
+			"\t%d\t%s\tStartPC: %d\tEndPC: %d",
+			pindex,
+			locVar.VarName(),
+			locVar.StartPC()+1,
+			locVar.EndPC()+1,
+		)
 	}
 	return lines
 }
@@ -138,7 +144,7 @@ func (me *Prototype) ListLocVars() []string {
 func (me *Prototype) ListUpvalues() []string {
 	var upvalueNum = len(me.Upvalues())
 	var lines = make([]string, upvalueNum+1)
-	lines[0] = fmt.Sprintf("Upvalue数: %d", upvalueNum)
+	lines[0] = fmt.Sprintf("Upvalue数: (%d)", upvalueNum)
 	for index, upvalue := range me.Upvalues() {
 		pindex := index + 1
 		var upvalueName string = ""
