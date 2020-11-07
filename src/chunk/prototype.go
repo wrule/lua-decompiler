@@ -136,10 +136,14 @@ func (me *Prototype) ListCodes() []string {
 	lines[0] = fmt.Sprintf("指令数(%d):", codeNum)
 	for index, code := range me.Codes() {
 		pindex := index + 1
+		var codeNum = ""
+		if index < len(me.LineInfos()) {
+			codeNum = fmt.Sprintf("%d", me.LineInfos()[index])
+		}
 		lines[pindex] = fmt.Sprintf(
-			"\t%d.\t[%d]\t0x%08X",
+			"\t%d.\t[%s]\t0x%08X",
 			pindex,
-			me.LineInfos()[index],
+			codeNum,
 			code,
 		)
 	}
