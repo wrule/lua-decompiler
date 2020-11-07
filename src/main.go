@@ -22,6 +22,6 @@ func main() {
 	var reader = chunk.NewReader(file)
 	var ck chunk.Chunk
 	ck.CheckLoad(reader)
-	ck.List()
+	ck.PrintList()
 	file.Close()
 }

@@ -2,6 +2,8 @@ package chunk
 
 import (
 	"fmt"
+
+	"github.com/fatih/color"
 )
 
 // Prototype 函数原型
@@ -86,15 +88,56 @@ func (me *Prototype) UpvalueNames() []string {
 	return me.upvalueNames
 }
 
+// ListName 名称信息
+func (me *Prototype) ListName() []string {
+	var lines = make([]string, 1)
+	var funcType = "main"
+	if me.LineDefined() > 0 {
+		funcType = "function"
+	}
+	lines[0] = fmt.Sprintf(
+		"%s <文件名: %s [%d:%d]>(%d 个指令)",
+		funcType,
+		me.Source(),
+		me.LineDefined(),
+		me.LastLineDefined(),
+		len(me.Codes()),
+	)
+	return lines
+}
+
+// ListMeta 基本信息
+func (me *Prototype) ListMeta() []string {
+	var lines = make([]string, 2)
+	varargFlag := ""
+	if me.IsVararg() > 0 {
+		varargFlag = "+"
+	}
+	lines[0] = fmt.Sprintf(
+		"参数个数: %d%s\t寄存器数: %d\tUpvalue数量: %d",
+		me.NumParams(),
+		varargFlag,
+		me.MaxStackSize(),
+		len(me.Upvalues()),
+	)
+	lines[1] = fmt.Sprintf(
+		"局部变量: %d\t常量数量: %d\t子函数数量: %d",
+		len(me.LocVars()),
+		len(me.Constants()),
+		len(me.Prototypes()),
+	)
+	return lines
+}
+
 // ListCodes 指令列表信息
 func (me *Prototype) ListCodes() []string {
 	var codeNum = len(me.Codes())
 	var lines = make([]string, codeNum+1)
-	lines[0] = fmt.Sprintf("| 指令数(%d):", codeNum)
+	lines[0] = fmt.Sprintf("指令数(%d):", codeNum)
 	for index, code := range me.Codes() {
 		pindex := index + 1
 		lines[pindex] = fmt.Sprintf(
-			"|\t%d.\t[%d]\t0x%08X",
+			"\t%d.\t[%d]\t0x%08X",
 			pindex,
 			me.LineInfos()[index],
 			code,
@@ -107,11 +150,11 @@ func (me *Prototype) ListCodes() []string {
 func (me *Prototype) ListConstants() []string {
 	var constantNum = len(me.Constants())
 	var lines = make([]string, constantNum+1)
-	lines[0] = fmt.Sprintf("| 常量数(%d):", constantNum)
+	lines[0] = fmt.Sprintf("常量数(%d):", constantNum)
 	for index, constant := range me.Constants() {
 		pindex := index + 1
 		lines[pindex] = fmt.Sprintf(
-			"|\t%d.\t%s:\t%s",
+			"\t%d.\t%s:\t%s",
 			pindex,
 			constant.TypeString(),
 			constant.ValueString(),
@@ -124,11 +167,11 @@ func (me *Prototype) ListConstants() []string {
 func (me *Prototype) ListLocVars() []string {
 	var locVarNum = len(me.LocVars())
 	var lines = make([]string, locVarNum+1)
-	lines[0] = fmt.Sprintf("| 局部变量数(%d):", locVarNum)
+	lines[0] = fmt.Sprintf("局部变量数(%d):", locVarNum)
 	for index, locVar := range me.LocVars() {
 		pindex := index + 1
 		lines[pindex] = fmt.Sprintf(
-			"|\t%d\t%s\tStartPC: %d\tEndPC: %d",
+			"\t%d\t%s\tStartPC: %d\tEndPC: %d",
 			pindex,
 			locVar.VarName(),
 			locVar.StartPC()+1,
@@ -142,7 +185,7 @@ func (me *Prototype) ListLocVars() []string {
 func (me *Prototype) ListUpvalues() []string {
 	var upvalueNum = len(me.Upvalues())
 	var lines = make([]string, upvalueNum+1)
-	lines[0] = fmt.Sprintf("| Upvalue数(%d):", upvalueNum)
+	lines[0] = fmt.Sprintf("Upvalue数(%d):", upvalueNum)
 	for index, upvalue := range me.Upvalues() {
 		pindex := index + 1
 		var upvalueName string = ""
@@ -150,7 +193,7 @@ func (me *Prototype) ListUpvalues() []string {
 			upvalueName = me.UpvalueNames()[index]
 		}
 		lines[pindex] = fmt.Sprintf(
-			"|\t%d.\t%s\tInstack: %d\tIdx: %d",
+			"\t%d.\t%s\tInstack: %d\tIdx: %d",
 			pindex,
 			upvalueName,
 			upvalue.Instack(),
@@ -160,58 +203,34 @@ func (me *Prototype) ListUpvalues() []string {
 	return lines
 }
 
-// ListMeta 基本信息
-func (me *Prototype) ListMeta() []string {
-	var lines = make([]string, 2)
-	varargFlag := ""
-	if me.IsVararg() > 0 {
-		varargFlag = "+"
-	}
-	lines[0] = fmt.Sprintf(
-		"| 参数个数: %d%s\t寄存器数: %d\tUpvalue数量: %d",
-		me.NumParams(),
-		varargFlag,
-		me.MaxStackSize(),
-		len(me.Upvalues()),
-	)
-	lines[1] = fmt.Sprintf(
-		"| 局部变量: %d\t常量数量: %d\t子函数数量: %d",
-		len(me.LocVars()),
-		len(me.Constants()),
-		len(me.Prototypes()),
-	)
-	return lines
-}
-
-// ListName 函数原型名称信息
-func (me *Prototype) ListName() []string {
-	var lines = make([]string, 1)
-	lines[0] = fmt.Sprintf(
-		"| <文件名: %s [%d:%d]>(%d 个指令)",
-		me.Source(),
-		me.LineDefined(),
-		me.LastLineDefined(),
-		len(me.Codes()),
-	)
-	return lines
-}
-
 // ListSubPrototypes 子函数原型信息
 func (me *Prototype) ListSubPrototypes() []string {
 	var lines []string = []string{}
+	lines = append(lines, fmt.Sprintf("子函数数(%d):", len(me.Prototypes())))
 	for _, subProto := range me.Prototypes() {
 		lines = append(lines, subProto.List()...)
 	}
-	for index := range lines {
-		lines[index] = "|\t" + lines[index]
+	for index := range lines[1:] {
+		lines[index+1] = "\t" + lines[index+1]
 	}
 	return lines
 }
 
-// List 输出函数原型信息
+// addFrame 为函数信息添加绿色边框
+func (me *Prototype) addFrame(lines []string) []string {
+	var frameLines = make([]string, len(lines)+2)
+	var index = 0
+	frameLines[index] = color.GreenString(".------------------- Func Start")
+	for index = 1; index < len(frameLines)-1; index++ {
+		frameLines[index] = fmt.Sprintf("%s %s", color.GreenString("|"), lines[index-1])
+	}
+	frameLines[index] = color.GreenString("'------------------- Func End")
+	return frameLines
+}
+
+// List 函数原型信息
 func (me *Prototype) List() []string {
 	var lines []string
-	lines = append(lines, ".------------------- Func Start")
 	lines = append(lines, me.ListName()...)
 	lines = append(lines, me.ListMeta()...)
 	lines = append(lines, me.ListCodes()...)
@@ -219,8 +238,7 @@ func (me *Prototype) List() []string {
 	lines = append(lines, me.ListLocVars()...)
 	lines = append(lines, me.ListUpvalues()...)
 	lines = append(lines, me.ListSubPrototypes()...)
-	lines = append(lines, "'------------------- Func End")
-	return lines
+	return me.addFrame(lines)
 }
 
 // PrintList 打印信息

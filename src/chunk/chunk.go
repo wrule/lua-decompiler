@@ -29,7 +29,7 @@ func (me *Chunk) CheckLoad(reader *Reader) {
 	me.mainFunc = reader.ReadPrototype("")
 }
 
-// List 输出Chunk信息
-func (me *Chunk) List() {
+// PrintList 输出Chunk信息
+func (me *Chunk) PrintList() {
 	me.MainFunc().PrintList()
 }

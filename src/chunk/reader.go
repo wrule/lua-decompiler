@@ -136,8 +136,12 @@ func (me *Reader) ReadUpvalues() []Upvalue {
 
 // ReadPrototype 读取函数原型
 func (me *Reader) ReadPrototype(parentSource string) *Prototype {
+	source := me.ReadString()
+	if source == "" {
+		source = parentSource
+	}
 	return &Prototype{
-		source:          me.ReadString(),
+		source:          source,
 		lineDefined:     me.ReadUint32(),
 		lastLineDefined: me.ReadUint32(),
 		numParams:       me.ReadByte(),
@@ -146,7 +150,7 @@ func (me *Reader) ReadPrototype(parentSource string) *Prototype {
 		codes:           me.ReadCodes(),
 		constants:       me.ReadConstants(),
 		upvalues:        me.ReadUpvalues(),
-		protos:          me.ReadPrototypes(parentSource),
+		protos:          me.ReadPrototypes(source),
 		lineInfos:       me.ReadLineInfos(),
 		locVars:         me.ReadLocVars(),
 		upvalueNames:    me.ReadUpvalueNames(),
