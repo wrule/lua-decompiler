@@ -39,3 +39,23 @@ func (me Instruction) AsBx() (a, sbx int) {
 func (me Instruction) Ax() int {
 	return int(me >> 6)
 }
+
+// OpName 获取指令名称
+func (me Instruction) OpName() string {
+	return OpCodes[me.Opcode()].name
+}
+
+// OpMode 获取指令莫斯和
+func (me Instruction) OpMode() ECodeMode {
+	return OpCodes[me.Opcode()].opMode
+}
+
+// BMode 获取操作数B的使用模式
+func (me Instruction) BMode() ECodeArgType {
+	return OpCodes[me.Opcode()].argBMode
+}
+
+// CMode 获取操作树C的使用模式
+func (me Instruction) CMode() ECodeArgType {
+	return OpCodes[me.Opcode()].argCMode
+}
