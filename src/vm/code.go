@@ -5,7 +5,7 @@ type ECodeMode int
 
 const (
 	// IABC 6 8 9 9
-	IABC = iota
+	IABC ECodeMode = iota
 	// IABx 6 8 18
 	IABx
 	// IAsBx 6 8 18
@@ -18,72 +18,82 @@ const (
 type Code struct {
 	testFlag byte
 	setAFlag byte
-	argBMode byte
-	argCMode byte
-	opMode   byte
+	argBMode ECodeArgType
+	argCMode ECodeArgType
+	opMode   ECodeMode
 	name     string
 }
 
-var opcodes = []Code{
+var OpCodes = []Code{
 	/*   T  A  B       C       mode        name    */
-	Code{0, 1, OpArgR, OpArgN, IABC /* */, "MOVE    "}, // R(A) := R(B)
-	Code{0, 1, OpArgK, OpArgN, IABx /* */, "LOADK   "}, // R(A) := Kst(Bx)
-	Code{0, 1, OpArgN, OpArgN, IABx /* */, "LOADKX  "}, // R(A) := Kst(extra arg)
-	Code{0, 1, OpArgU, OpArgU, IABC /* */, "LOADBOOL"}, // R(A) := (bool)B; if (C) pc++
-	Code{0, 1, OpArgU, OpArgN, IABC /* */, "LOADNIL "}, // R(A), R(A+1), ..., R(A+B) := nil
-	Code{0, 1, OpArgU, OpArgN, IABC /* */, "GETUPVAL"}, // R(A) := UpValue[B]
-	Code{0, 1, OpArgU, OpArgK, IABC /* */, "GETTABUP"}, // R(A) := UpValue[B][RK(C)]
-	Code{0, 1, OpArgR, OpArgK, IABC /* */, "GETTABLE"}, // R(A) := R(B)[RK(C)]
-	Code{0, 0, OpArgK, OpArgK, IABC /* */, "SETTABUP"}, // UpValue[A][RK(B)] := RK(C)
-	Code{0, 0, OpArgU, OpArgN, IABC /* */, "SETUPVAL"}, // UpValue[B] := R(A)
-	Code{0, 0, OpArgK, OpArgK, IABC /* */, "SETTABLE"}, // R(A)[RK(B)] := RK(C)
-	Code{0, 1, OpArgU, OpArgU, IABC /* */, "NEWTABLE"}, // R(A) := {} (size = B,C)
-	Code{0, 1, OpArgR, OpArgK, IABC /* */, "SELF    "}, // R(A+1) := R(B); R(A) := R(B)[RK(C)]
-	Code{0, 1, OpArgK, OpArgK, IABC /* */, "ADD     "}, // R(A) := RK(B) + RK(C)
-	Code{0, 1, OpArgK, OpArgK, IABC /* */, "SUB     "}, // R(A) := RK(B) - RK(C)
-	Code{0, 1, OpArgK, OpArgK, IABC /* */, "MUL     "}, // R(A) := RK(B) * RK(C)
-	Code{0, 1, OpArgK, OpArgK, IABC /* */, "MOD     "}, // R(A) := RK(B) % RK(C)
-	Code{0, 1, OpArgK, OpArgK, IABC /* */, "POW     "}, // R(A) := RK(B) ^ RK(C)
-	Code{0, 1, OpArgK, OpArgK, IABC /* */, "DIV     "}, // R(A) := RK(B) / RK(C)
-	Code{0, 1, OpArgK, OpArgK, IABC /* */, "IDIV    "}, // R(A) := RK(B) // RK(C)
-	Code{0, 1, OpArgK, OpArgK, IABC /* */, "BAND    "}, // R(A) := RK(B) & RK(C)
-	Code{0, 1, OpArgK, OpArgK, IABC /* */, "BOR     "}, // R(A) := RK(B) | RK(C)
-	Code{0, 1, OpArgK, OpArgK, IABC /* */, "BXOR    "}, // R(A) := RK(B) ~ RK(C)
-	Code{0, 1, OpArgK, OpArgK, IABC /* */, "SHL     "}, // R(A) := RK(B) << RK(C)
-	Code{0, 1, OpArgK, OpArgK, IABC /* */, "SHR     "}, // R(A) := RK(B) >> RK(C)
-	Code{0, 1, OpArgR, OpArgN, IABC /* */, "UNM     "}, // R(A) := -R(B)
-	Code{0, 1, OpArgR, OpArgN, IABC /* */, "BNOT    "}, // R(A) := ~R(B)
-	Code{0, 1, OpArgR, OpArgN, IABC /* */, "NOT     "}, // R(A) := not R(B)
-	Code{0, 1, OpArgR, OpArgN, IABC /* */, "LEN     "}, // R(A) := length of R(B)
-	Code{0, 1, OpArgR, OpArgR, IABC /* */, "CONCAT  "}, // R(A) := R(B).. ... ..R(C)
-	Code{0, 0, OpArgR, OpArgN, IAsBx /**/, "JMP     "}, // pc+=sBx; if (A) close all upvalues >= R(A - 1)
-	Code{1, 0, OpArgK, OpArgK, IABC /* */, "EQ      "}, // if ((RK(B) == RK(C)) ~= A) then pc++
-	Code{1, 0, OpArgK, OpArgK, IABC /* */, "LT      "}, // if ((RK(B) <  RK(C)) ~= A) then pc++
-	Code{1, 0, OpArgK, OpArgK, IABC /* */, "LE      "}, // if ((RK(B) <= RK(C)) ~= A) then pc++
-	Code{1, 0, OpArgN, OpArgU, IABC /* */, "TEST    "}, // if not (R(A) <=> C) then pc++
-	Code{1, 1, OpArgR, OpArgU, IABC /* */, "TESTSET "}, // if (R(B) <=> C) then R(A) := R(B) else pc++
-	Code{0, 1, OpArgU, OpArgU, IABC /* */, "CALL    "}, // R(A), ... ,R(A+C-2) := R(A)(R(A+1), ... ,R(A+B-1))
-	Code{0, 1, OpArgU, OpArgU, IABC /* */, "TAILCALL"}, // return R(A)(R(A+1), ... ,R(A+B-1))
-	Code{0, 0, OpArgU, OpArgN, IABC /* */, "RETURN  "}, // return R(A), ... ,R(A+B-2)
-	Code{0, 1, OpArgR, OpArgN, IAsBx /**/, "FORLOOP "}, // R(A)+=R(A+2); if R(A) <?= R(A+1) then { pc+=sBx; R(A+3)=R(A) }
-	Code{0, 1, OpArgR, OpArgN, IAsBx /**/, "FORPREP "}, // R(A)-=R(A+2); pc+=sBx
-	Code{0, 0, OpArgN, OpArgU, IABC /* */, "TFORCALL"}, // R(A+3), ... ,R(A+2+C) := R(A)(R(A+1), R(A+2));
-	Code{0, 1, OpArgR, OpArgN, IAsBx /**/, "TFORLOOP"}, // if R(A+1) ~= nil then { R(A)=R(A+1); pc += sBx }
-	Code{0, 0, OpArgU, OpArgU, IABC /* */, "SETLIST "}, // R(A)[(C-1)*FPF+i] := R(A+i), 1 <= i <= B
-	Code{0, 1, OpArgU, OpArgN, IABx /* */, "CLOSURE "}, // R(A) := closure(KPROTO[Bx])
-	Code{0, 1, OpArgU, OpArgN, IABC /* */, "VARARG  "}, // R(A), R(A+1), ..., R(A+B-2) = vararg
-	Code{0, 0, OpArgU, OpArgU, IAx /*  */, "EXTRAARG"}, // extra (larger) argument for previous Code
+	Code{0, 1, CodeArgR, CodeArgN, IABC /* */, "MOVE    "}, // R(A) := R(B)
+	Code{0, 1, CodeArgK, CodeArgN, IABx /* */, "LOADK   "}, // R(A) := Kst(Bx)
+	Code{0, 1, CodeArgN, CodeArgN, IABx /* */, "LOADKX  "}, // R(A) := Kst(extra arg)
+	Code{0, 1, CodeArgU, CodeArgU, IABC /* */, "LOADBOOL"}, // R(A) := (bool)B; if (C) pc++
+	Code{0, 1, CodeArgU, CodeArgN, IABC /* */, "LOADNIL "}, // R(A), R(A+1), ..., R(A+B) := nil
+	Code{0, 1, CodeArgU, CodeArgN, IABC /* */, "GETUPVAL"}, // R(A) := UpValue[B]
+	Code{0, 1, CodeArgU, CodeArgK, IABC /* */, "GETTABUP"}, // R(A) := UpValue[B][RK(C)]
+	Code{0, 1, CodeArgR, CodeArgK, IABC /* */, "GETTABLE"}, // R(A) := R(B)[RK(C)]
+	Code{0, 0, CodeArgK, CodeArgK, IABC /* */, "SETTABUP"}, // UpValue[A][RK(B)] := RK(C)
+	Code{0, 0, CodeArgU, CodeArgN, IABC /* */, "SETUPVAL"}, // UpValue[B] := R(A)
+	Code{0, 0, CodeArgK, CodeArgK, IABC /* */, "SETTABLE"}, // R(A)[RK(B)] := RK(C)
+	Code{0, 1, CodeArgU, CodeArgU, IABC /* */, "NEWTABLE"}, // R(A) := {} (size = B,C)
+	Code{0, 1, CodeArgR, CodeArgK, IABC /* */, "SELF    "}, // R(A+1) := R(B); R(A) := R(B)[RK(C)]
+	Code{0, 1, CodeArgK, CodeArgK, IABC /* */, "ADD     "}, // R(A) := RK(B) + RK(C)
+	Code{0, 1, CodeArgK, CodeArgK, IABC /* */, "SUB     "}, // R(A) := RK(B) - RK(C)
+	Code{0, 1, CodeArgK, CodeArgK, IABC /* */, "MUL     "}, // R(A) := RK(B) * RK(C)
+	Code{0, 1, CodeArgK, CodeArgK, IABC /* */, "MOD     "}, // R(A) := RK(B) % RK(C)
+	Code{0, 1, CodeArgK, CodeArgK, IABC /* */, "POW     "}, // R(A) := RK(B) ^ RK(C)
+	Code{0, 1, CodeArgK, CodeArgK, IABC /* */, "DIV     "}, // R(A) := RK(B) / RK(C)
+	Code{0, 1, CodeArgK, CodeArgK, IABC /* */, "IDIV    "}, // R(A) := RK(B) // RK(C)
+	Code{0, 1, CodeArgK, CodeArgK, IABC /* */, "BAND    "}, // R(A) := RK(B) & RK(C)
+	Code{0, 1, CodeArgK, CodeArgK, IABC /* */, "BOR     "}, // R(A) := RK(B) | RK(C)
+	Code{0, 1, CodeArgK, CodeArgK, IABC /* */, "BXOR    "}, // R(A) := RK(B) ~ RK(C)
+	Code{0, 1, CodeArgK, CodeArgK, IABC /* */, "SHL     "}, // R(A) := RK(B) << RK(C)
+	Code{0, 1, CodeArgK, CodeArgK, IABC /* */, "SHR     "}, // R(A) := RK(B) >> RK(C)
+	Code{0, 1, CodeArgR, CodeArgN, IABC /* */, "UNM     "}, // R(A) := -R(B)
+	Code{0, 1, CodeArgR, CodeArgN, IABC /* */, "BNOT    "}, // R(A) := ~R(B)
+	Code{0, 1, CodeArgR, CodeArgN, IABC /* */, "NOT     "}, // R(A) := not R(B)
+	Code{0, 1, CodeArgR, CodeArgN, IABC /* */, "LEN     "}, // R(A) := length of R(B)
+	Code{0, 1, CodeArgR, CodeArgR, IABC /* */, "CONCAT  "}, // R(A) := R(B).. ... ..R(C)
+	Code{0, 0, CodeArgR, CodeArgN, IAsBx /**/, "JMP     "}, // pc+=sBx; if (A) close all upvalues >= R(A - 1)
+	Code{1, 0, CodeArgK, CodeArgK, IABC /* */, "EQ      "}, // if ((RK(B) == RK(C)) ~= A) then pc++
+	Code{1, 0, CodeArgK, CodeArgK, IABC /* */, "LT      "}, // if ((RK(B) <  RK(C)) ~= A) then pc++
+	Code{1, 0, CodeArgK, CodeArgK, IABC /* */, "LE      "}, // if ((RK(B) <= RK(C)) ~= A) then pc++
+	Code{1, 0, CodeArgN, CodeArgU, IABC /* */, "TEST    "}, // if not (R(A) <=> C) then pc++
+	Code{1, 1, CodeArgR, CodeArgU, IABC /* */, "TESTSET "}, // if (R(B) <=> C) then R(A) := R(B) else pc++
+	Code{0, 1, CodeArgU, CodeArgU, IABC /* */, "CALL    "}, // R(A), ... ,R(A+C-2) := R(A)(R(A+1), ... ,R(A+B-1))
+	Code{0, 1, CodeArgU, CodeArgU, IABC /* */, "TAILCALL"}, // return R(A)(R(A+1), ... ,R(A+B-1))
+	Code{0, 0, CodeArgU, CodeArgN, IABC /* */, "RETURN  "}, // return R(A), ... ,R(A+B-2)
+	Code{0, 1, CodeArgR, CodeArgN, IAsBx /**/, "FORLOOP "}, // R(A)+=R(A+2); if R(A) <?= R(A+1) then { pc+=sBx; R(A+3)=R(A) }
+	Code{0, 1, CodeArgR, CodeArgN, IAsBx /**/, "FORPREP "}, // R(A)-=R(A+2); pc+=sBx
+	Code{0, 0, CodeArgN, CodeArgU, IABC /* */, "TFORCALL"}, // R(A+3), ... ,R(A+2+C) := R(A)(R(A+1), R(A+2));
+	Code{0, 1, CodeArgR, CodeArgN, IAsBx /**/, "TFORLOOP"}, // if R(A+1) ~= nil then { R(A)=R(A+1); pc += sBx }
+	Code{0, 0, CodeArgU, CodeArgU, IABC /* */, "SETLIST "}, // R(A)[(C-1)*FPF+i] := R(A+i), 1 <= i <= B
+	Code{0, 1, CodeArgU, CodeArgN, IABx /* */, "CLOSURE "}, // R(A) := closure(KPROTO[Bx])
+	Code{0, 1, CodeArgU, CodeArgN, IABC /* */, "VARARG  "}, // R(A), R(A+1), ..., R(A+B-2) = vararg
+	Code{0, 0, CodeArgU, CodeArgU, IAx /*  */, "EXTRAARG"}, // extra (larger) argument for previous Code
 }
 
-const (
-	OpArgN = iota
-	OpArgU
-	OpArgR
-	OpArgK
-)
+// ECodeArgType 指令参数类型
+type ECodeArgType byte
 
 const (
-	OpMove = iota
+	// CodeArgN 不表示任何信息
+	CodeArgN ECodeArgType = iota
+	// CodeArgR IABC模式表示寄存器索引，IAsBx模式表示跳转偏移
+	CodeArgR
+	// CodeArgK 常量表索引或寄存器索引
+	CodeArgK
+	// CodeArgU 其他情况（布尔值，整数值，Upvalue索引，子函数索引等）
+	CodeArgU
+)
+
+// ECode 指令操作码
+type ECode byte
+
+const (
+	OpMove ECode = iota
 	OpLoadK
 	OpLoadKx
 	OpLoadBool

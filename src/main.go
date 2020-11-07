@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"./chunk"
+	"./vm"
 )
 
 func main() {
@@ -24,4 +25,6 @@ func main() {
 	ck.CheckLoad(reader)
 	ck.PrintList()
 	file.Close()
+
+	fmt.Println(len(vm.OpCodes))
 }
