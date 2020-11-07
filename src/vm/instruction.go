@@ -55,7 +55,7 @@ func (me Instruction) BMode() ECodeArgType {
 	return OpCodes[me.Opcode()].argBMode
 }
 
-// CMode 获取操作树C的使用模式
+// CMode 获取操作数C的使用模式
 func (me Instruction) CMode() ECodeArgType {
 	return OpCodes[me.Opcode()].argCMode
 }
