@@ -46,16 +46,16 @@ func (me Instruction) OpName() string {
 }
 
 // OpMode 获取指令莫斯和
-func (me Instruction) OpMode() ECodeMode {
+func (me Instruction) OpMode() EInstructionMode {
 	return OpCodes[me.Opcode()].opMode
 }
 
 // BMode 获取操作数B的使用模式
-func (me Instruction) BMode() ECodeArgType {
+func (me Instruction) BMode() EInstructionArgType {
 	return OpCodes[me.Opcode()].argBMode
 }
 
 // CMode 获取操作数C的使用模式
-func (me Instruction) CMode() ECodeArgType {
+func (me Instruction) CMode() EInstructionArgType {
 	return OpCodes[me.Opcode()].argCMode
 }
