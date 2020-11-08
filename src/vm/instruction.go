@@ -15,8 +15,8 @@ func (me Instruction) Opcode() EInstruction {
 // ABC 获取ABC模式下的参数（6，8，9，9）
 func (me Instruction) ABC() (a, b, c int) {
 	a = int(me >> 6 & 0xff)
-	b = int(me >> 14 & 0x1ff)
-	c = int(me >> 23)
+	c = int(me >> 14 & 0x1ff)
+	b = int(me >> 23)
 	return a, b, c
 }
 

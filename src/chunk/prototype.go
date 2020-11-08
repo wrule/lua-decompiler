@@ -141,13 +141,24 @@ func (me *Prototype) ListCodes() []string {
 		if index < len(me.LineInfos()) {
 			codeNum = fmt.Sprintf("%d", me.LineInfos()[index])
 		}
+
 		lines[pindex] = fmt.Sprintf(
-			"\t%d.\t[%s]\t%s %s",
+			"\t%d.\t[%s]\t0x%08X\t%s %s",
 			pindex,
 			codeNum,
+			code,
 			vm.Instruction(code).OpName(),
 			vm.Instruction(code).Operands(),
 		)
+
+		// 0000.0000.0 100.0000.00 00.0000.00 00.0110
+		// lines[pindex] = fmt.Sprintf(
+		// 	"\t%d.\t[%s]\t%s %s",
+		// 	pindex,
+		// 	codeNum,
+		// 	vm.Instruction(code).OpName(),
+		// 	vm.Instruction(code).Operands(),
+		// )
 	}
 	return lines
 }
