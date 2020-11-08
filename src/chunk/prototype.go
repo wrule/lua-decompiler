@@ -3,6 +3,7 @@ package chunk
 import (
 	"fmt"
 
+	"../vm"
 	"github.com/fatih/color"
 )
 
@@ -141,10 +142,11 @@ func (me *Prototype) ListCodes() []string {
 			codeNum = fmt.Sprintf("%d", me.LineInfos()[index])
 		}
 		lines[pindex] = fmt.Sprintf(
-			"\t%d.\t[%s]\t0x%08X",
+			"\t%d.\t[%s]\t%s %s",
 			pindex,
 			codeNum,
-			code,
+			vm.Instruction(code).OpName(),
+			vm.Instruction(code).Operands(),
 		)
 	}
 	return lines
