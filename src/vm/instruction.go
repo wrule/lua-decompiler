@@ -4,8 +4,8 @@ package vm
 type Instruction uint32
 
 // Opcode 获取指令操作码
-func (me Instruction) Opcode() int {
-	return int(me & 0x3f)
+func (me Instruction) Opcode() EInstruction {
+	return EInstruction(me & 0x3f)
 }
 
 // ABC 获取ABC模式下的参数（6，8，9，9）
@@ -45,7 +45,7 @@ func (me Instruction) OpName() string {
 	return InstructionInfos[me.Opcode()].name
 }
 
-// OpMode 获取指令莫斯和
+// OpMode 获取指令模式
 func (me Instruction) OpMode() EInstructionMode {
 	return InstructionInfos[me.Opcode()].opMode
 }
