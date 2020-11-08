@@ -26,5 +26,5 @@ func main() {
 	ck.PrintList()
 	file.Close()
 
-	fmt.Println(len(vm.OpCodes))
+	fmt.Println(len(vm.InstructionInfos))
 }

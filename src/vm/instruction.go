@@ -42,20 +42,73 @@ func (me Instruction) Ax() int {
 
 // OpName 获取指令名称
 func (me Instruction) OpName() string {
-	return OpCodes[me.Opcode()].name
+	return InstructionInfos[me.Opcode()].name
 }
 
 // OpMode 获取指令莫斯和
 func (me Instruction) OpMode() EInstructionMode {
-	return OpCodes[me.Opcode()].opMode
+	return InstructionInfos[me.Opcode()].opMode
 }
 
 // BMode 获取操作数B的使用模式
 func (me Instruction) BMode() EInstructionArgType {
-	return OpCodes[me.Opcode()].argBMode
+	return InstructionInfos[me.Opcode()].argBMode
 }
 
 // CMode 获取操作数C的使用模式
 func (me Instruction) CMode() EInstructionArgType {
-	return OpCodes[me.Opcode()].argCMode
+	return InstructionInfos[me.Opcode()].argCMode
 }
+
+// EInstruction 指令操作码
+type EInstruction byte
+
+const (
+	OpMove EInstruction = iota
+	OpLoadK
+	OpLoadKx
+	OpLoadBool
+	OpLoadNil
+	OpGetUpval
+	OpGetTabup
+	OpGetTable
+	OpSetTabup
+	OpSetUpval
+	OpSetTable
+	OpNewTable
+	OpSelf
+	OpAdd
+	OpSub
+	OpMul
+	OpMod
+	OpPow
+	OpDiv
+	OpIDiv
+	OpBand
+	OpBor
+	OpBxor
+	OpShl
+	OpShr
+	OpUnm
+	OpBNot
+	OpNot
+	OpLen
+	OpConcat
+	OpJmp
+	OpEq
+	OpLt
+	OpLe
+	OpTest
+	OpTestSet
+	OpCall
+	OpTailCall
+	OpReturn
+	OpForLoop
+	OpForPrep
+	OpTForCall
+	OpTForLoop
+	OpSetList
+	OpClosure
+	OpVararg
+	OpExtraarg
+)
