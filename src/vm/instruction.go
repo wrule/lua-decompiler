@@ -23,15 +23,16 @@ func (me Instruction) ABx() (a, bx int) {
 	return a, bx
 }
 
-// MaxArgBx s
+// MaxArgBx （比如说255）
 const MaxArgBx = 1<<18 - 1
 
-// MaxArgSBx s
+// MaxArgSBx （比如说127）
 const MaxArgSBx = MaxArgBx >> 1
 
 // AsBx 获取AsBx模式下的参数（6，8，18）
 func (me Instruction) AsBx() (a, sbx int) {
 	a, bx := me.ABx()
+	// 比如[0 ~ 126][127][128 ~ 255]，可以表示127个负数和128个正数，一个0
 	return a, bx - MaxArgSBx
 }
 
