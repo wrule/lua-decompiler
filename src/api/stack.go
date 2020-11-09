@@ -1,20 +1,17 @@
 package api
 
-// LuaStack s
+// LuaStack Lua栈
 type LuaStack struct {
 	slots []LuaValue
 	top   int
 }
 
-func (me *LuaStack) Len() int {
+// Size 获取栈容量
+func (me *LuaStack) Size() int {
 	return len(me.slots)
 }
 
-func (me *LuaStack) Top() int {
-	return me.top
-}
-
-// LuaNilValue s
+// LuaNilValue 生成一个LuaTypeNil值
 func (me *LuaStack) LuaNilValue() LuaValue {
 	return LuaValue{
 		vtype: LuaTypeNil,
@@ -22,9 +19,9 @@ func (me *LuaStack) LuaNilValue() LuaValue {
 	}
 }
 
-// Check 检查栈中是否有满足n的足够空间，如果没有则扩容
+// Check 检查栈中是否有满足n个LuaValue的足够空间，如果没有则扩容
 func (me *LuaStack) Check(n int) {
-	var diff = n - (len(me.slots) - me.top)
+	var diff = n - (me.Size() - me.top)
 	for i := 0; i < diff; i++ {
 		me.slots = append(me.slots, me.LuaNilValue())
 	}
@@ -32,14 +29,14 @@ func (me *LuaStack) Check(n int) {
 
 // Push 向栈中压入一个值
 func (me *LuaStack) Push(value LuaValue) {
-	if me.top >= me.Len() {
+	if me.top >= me.Size() {
 		panic("栈空间不足，无法Push")
 	}
 	me.slots[me.top] = value
 	me.top++
 }
 
-// Pop 从栈中取出一个值
+// Pop 从栈中弹出一个值
 func (me *LuaStack) Pop() LuaValue {
 	if me.top < 1 {
 		panic("栈已经为空，无法Pop")
@@ -54,9 +51,8 @@ func (me *LuaStack) Pop() LuaValue {
 func (me *LuaStack) AbsIndex(index int) int {
 	if index >= 0 {
 		return index
-	} else {
-		return index + me.top + 1
 	}
+	return index + me.top + 1
 }
 
 // IsValid 判断一个索引是否有效
