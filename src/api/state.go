@@ -41,12 +41,13 @@ func (me *LuaState) Replace(index int) {
 
 // Insert s
 func (me *LuaState) Insert(index int) {
-
+	me.Rotate(index, 1)
 }
 
 // Remove s
 func (me *LuaState) Remove(index int) {
-
+	me.Rotate(index, -1)
+	me.Pop(1)
 }
 
 // Rotate 区间旋转
