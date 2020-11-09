@@ -69,7 +69,7 @@ func (me *LuaStack) IsValid(index int) bool {
 func (me *LuaStack) Get(index int) LuaValue {
 	if me.IsValid(index) {
 		absIndex := me.AbsIndex(index)
-		return me.slots[absIndex]
+		return me.slots[absIndex-1]
 	}
 	return me.LuaNilValue()
 }
@@ -78,7 +78,7 @@ func (me *LuaStack) Get(index int) LuaValue {
 func (me *LuaStack) Set(index int, value LuaValue) {
 	if me.IsValid(index) {
 		absIndex := me.AbsIndex(index)
-		me.slots[absIndex] = value
+		me.slots[absIndex-1] = value
 		return
 	}
 	panic("错误的索引，无法对栈进行Set")
