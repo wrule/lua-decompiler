@@ -80,6 +80,16 @@ func (me *LuaStack) Set(index int, value LuaValue) {
 	panic("错误的索引，无法对栈进行Set")
 }
 
+// Reverse 区间倒序
+func (me *LuaStack) Reverse(fromIndex, toIndex int) {
+	slots := me.slots
+	for fromIndex < toIndex {
+		slots[fromIndex], slots[toIndex] = slots[toIndex], slots[fromIndex]
+		fromIndex++
+		toIndex--
+	}
+}
+
 // NewLuaStack 构造函数，新建一个Lua栈
 func NewLuaStack(size int) *LuaStack {
 	return &LuaStack{
