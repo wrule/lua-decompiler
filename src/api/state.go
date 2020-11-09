@@ -18,11 +18,11 @@ func (me *LuaState) CheckStack(n int) bool {
 	return true
 }
 
-func (me *LuaState) Pop(n int) {
-	for i := 0; i < n; i++ {
-		me.stack.Pop()
-	}
-}
+// func (me *LuaState) Pop(n int) {
+// 	for i := 0; i < n; i++ {
+// 		me.stack.Pop()
+// 	}
+// }
 
 func (me *LuaState) Copy(fromIndex int, toIndex int) {
 	value := me.stack.Get(fromIndex)
@@ -54,27 +54,28 @@ func (me *LuaState) Remove(index int) {
 func (me *LuaState) Rotate(index, n int) {
 	// [1, 2, 3, 4, 5]
 	// len = 5 index = 2 n = 2
+	// [1，3，2，5，4]
 	// [1，4，5，2，3]
-	// 4
-	t := me.stack.top - 1 /* end of stack segment being rotated */
-	// 1
-	p := me.stack.AbsIndex(index) - 1 /* start of segment */
-	var m int                         /* end of prefix */
+	t := me.stack.top - 1
+	p := me.stack.AbsIndex(index) - 1
+	var m int
 	if n >= 0 {
-		// 2
 		m = t - n
 	} else {
 		m = p - n - 1
 	}
-	// 1, 2
-	// [1，3，2，4，5]
-	me.stack.Reverse(p, m) /* reverse the prefix with length 'n' */
-	// 3, 4
-	// [1，3，2，5，4]
-	me.stack.Reverse(m+1, t) /* reverse the suffix */
-	// 1, 4
-	// [1，4，5，2，3]
-	me.stack.Reverse(p, t) /* reverse the entire segment */
+	me.stack.Reverse(p, m)
+	me.stack.Reverse(m+1, t)
+	me.stack.Reverse(p, t)
+}
+
+// SetTop s
+func (me *LuaState) SetTop(index int) {
+
+}
+
+func (me *LuaState) Pop(n int) {
+	me.SetTop(-n - 1)
 }
 
 // NewLuaState 构造函数创建一个LuaState
