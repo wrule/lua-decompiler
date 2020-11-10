@@ -16,7 +16,7 @@ func (me *LuaState) PushBoolean(value bool) {
 // PushInteger 向栈中压入一个整数值
 func (me *LuaState) PushInteger(value int64) {
 	me.stack.Push(LuaValue{
-		vtype: LuaTypeNumber,
+		vtype: LuaTypeInteger,
 		value: value,
 	})
 }

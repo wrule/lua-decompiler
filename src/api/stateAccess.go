@@ -37,7 +37,9 @@ func (me *LuaState) IsBoolean(index int) bool {
 // IsString 判断指定索引处的值是否为String或者Number类型
 func (me *LuaState) IsString(index int) bool {
 	vtype := me.Type(index)
-	return vtype == LuaTypeString || vtype == LuaTypeNumber
+	return vtype == LuaTypeString ||
+		vtype == LuaTypeInteger ||
+		vtype == LuaTypeNumber
 }
 
 // IsNumber 判断指定索引处的值是否为Number类型
@@ -53,9 +55,10 @@ func (me *LuaState) IsInteger(index int) bool {
 	return ok
 }
 
-// ToBoolean s
+// ToBoolean 获取执行索引处的值并转化成为布尔类型
 func (me *LuaState) ToBoolean(index int) bool {
-	return true
+	value := me.stack.Get(index)
+	return value.ToBoolean().Value().(bool)
 }
 
 func (me *LuaState) ToNumber(index int) float64 {

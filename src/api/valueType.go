@@ -12,6 +12,8 @@ func (me ELuaValueType) Name() string {
 		return "nil"
 	case LuaTypeBoolean:
 		return "boolean"
+	case LuaTypeInteger:
+		return "integer"
 	case LuaTypeNumber:
 		return "number"
 	case LuaTypeString:
@@ -36,6 +38,7 @@ const (
 	LuaTypeNone ELuaValueType = iota - 1
 	LuaTypeNil
 	LuaTypeBoolean
+	LuaTypeInteger
 	LuaTypeNumber
 	LuaTypeString
 	LuaTypeTable
