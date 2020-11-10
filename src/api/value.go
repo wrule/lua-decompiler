@@ -17,38 +17,41 @@ func (me *LuaValue) Value() interface{} {
 }
 
 // ToBoolean 尝试转换为布尔类型
-func (me *LuaValue) ToBoolean() *LuaValue {
+func (me *LuaValue) ToBoolean() bool {
 	switch me.Type() {
 	// 确定这个不是false？
 	case LuaTypeNone:
-		return &LuaValue{
-			vtype: LuaTypeBoolean,
-			value: false,
-		}
+		return false
 	case LuaTypeNil:
-		return &LuaValue{
-			vtype: LuaTypeBoolean,
-			value: false,
-		}
+		return false
 	case LuaTypeBoolean:
-		return me
+		return me.Value().(bool)
 	default:
-		return &LuaValue{
-			vtype: LuaTypeBoolean,
-			value: true,
-		}
+		return true
 	}
 }
 
-// ToNumberX s
-func (me *LuaValue) ToNumberX() (*LuaValue, bool) {
+// ToNumberX 尝试取得float64的值
+func (me *LuaValue) ToNumberX() (float64, bool) {
 	switch me.Type() {
+	case LuaTypeInteger:
+		num := float64(me.Value().(int64))
+		return num, true
 	case LuaTypeNumber:
-		return me, true
+		return me.Value().(float64), true
 	default:
-		return &LuaValue{
-			vtype: LuaTypeNumber,
-			value: float64(0),
-		}, false
+		return float64(0), false
 	}
+}
+
+// ToIntegerX 尝试取得int64的值
+func (me *LuaValue) ToIntegerX() (int64, bool) {
+	value := me.Value()
+	num, ok := value.(int64)
+	return num, ok
+}
+
+// ToStringX s
+func (me *LuaValue) ToStringX() (string, bool) {
+	return "", true
 }

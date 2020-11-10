@@ -58,29 +58,41 @@ func (me *LuaState) IsInteger(index int) bool {
 // ToBoolean 获取执行索引处的值并转化成为布尔类型
 func (me *LuaState) ToBoolean(index int) bool {
 	value := me.stack.Get(index)
-	return value.ToBoolean().Value().(bool)
+	return value.ToBoolean()
 }
 
+// ToNumber s
 func (me *LuaState) ToNumber(index int) float64 {
-	return 0
+	num, _ := me.ToNumberX(index)
+	return num
 }
 
+// ToNumberX s
 func (me *LuaState) ToNumberX(index int) (float64, bool) {
-	return 0, true
+	value := me.stack.Get(index)
+	return value.ToNumberX()
 }
 
+// ToInteger s
 func (me *LuaState) ToInteger(index int) int64 {
-	return 0
+	num, _ := me.ToIntegerX(index)
+	return num
 }
 
+// ToIntegerX s
 func (me *LuaState) ToIntegerX(index int) (int64, bool) {
-	return 0, true
+	value := me.stack.Get(index)
+	return value.ToIntegerX()
 }
 
+// ToString s
 func (me *LuaState) ToString(index int) string {
-	return ""
+	str, _ := me.ToStringX(index)
+	return str
 }
 
+// ToStringX s
 func (me *LuaState) ToStringX(index int) (string, bool) {
-	return "", true
+	value := me.stack.Get(index)
+	return value.ToStringX()
 }
