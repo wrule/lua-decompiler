@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
+	"./api"
 	"./chunk"
-	"./vm"
 )
 
 func main() {
@@ -26,5 +26,25 @@ func main() {
 	ck.PrintList()
 	file.Close()
 
-	fmt.Println(len(vm.InstructionInfos))
+	// fmt.Println(len(vm.InstructionInfos))
+
+	state := api.NewLuaState()
+	state.PushBoolean(true)
+	state.List()
+	state.PushInteger(10)
+	state.List()
+	state.PushNil()
+	state.List()
+	state.PushString("hello")
+	state.List()
+	state.PushValue(-4)
+	state.List()
+	state.Replace(3)
+	state.List()
+	state.SetTop(6)
+	state.List()
+	state.Remove(-3)
+	state.List()
+	state.SetTop(-5)
+	state.List()
 }
