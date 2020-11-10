@@ -69,13 +69,29 @@ func (me *LuaState) Rotate(index, n int) {
 	me.stack.Reverse(p, t)
 }
 
-// SetTop s
+// SetTop 设置新的栈顶位置
+// [0, 1, 2, 3, 4]
+// Go 5
 func (me *LuaState) SetTop(index int) {
-
+	newTop := me.AbsIndex(index)
+	if newTop < 0 {
+		panic("栈顶不能为负")
+	}
+	diff := me.GetTop() - newTop
+	if diff > 0 {
+		for i := 0; i < diff; i++ {
+			me.stack.Pop()
+		}
+	} else if diff < 0 {
+		for i := diff; i < 0; i++ {
+			me.stack.Push(me.stack.LuaNilValue())
+		}
+	}
 }
 
+// Pop 连续弹出n个值
 func (me *LuaState) Pop(n int) {
-	me.SetTop(-n - 1)
+	me.SetTop(-1 - n)
 }
 
 // NewLuaState 构造函数创建一个LuaState
