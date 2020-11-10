@@ -16,7 +16,7 @@ func (me *LuaValue) Value() interface{} {
 	return me.value
 }
 
-// ToBoolean 尝试转换为布尔类型
+// ToBoolean 尝试取得布尔类型值
 func (me *LuaValue) ToBoolean() bool {
 	switch me.Type() {
 	// 确定这个不是false？
