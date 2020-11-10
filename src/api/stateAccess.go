@@ -44,14 +44,13 @@ func (me *LuaState) IsString(index int) bool {
 
 // IsNumber 判断指定索引处的值是否为Number类型
 func (me *LuaState) IsNumber(index int) bool {
-	return true
+	_, ok := me.ToNumberX(index)
+	return ok
 }
 
 // IsInteger s
 func (me *LuaState) IsInteger(index int) bool {
-	dstValue := me.stack.Get(index)
-	value := dstValue.Value()
-	_, ok := value.(int64)
+	_, ok := me.ToIntegerX(index)
 	return ok
 }
 

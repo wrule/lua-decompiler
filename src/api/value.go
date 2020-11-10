@@ -1,5 +1,7 @@
 package api
 
+import "fmt"
+
 // LuaValue Lua值
 type LuaValue struct {
 	vtype ELuaValueType
@@ -53,5 +55,15 @@ func (me *LuaValue) ToIntegerX() (int64, bool) {
 
 // ToStringX s
 func (me *LuaValue) ToStringX() (string, bool) {
-	return "", true
+	switch me.Type() {
+	case LuaTypeString:
+		return me.Value().(string), true
+	case LuaTypeInteger, LuaTypeNumber:
+		str := fmt.Sprintf("%v", me.Value())
+		me.vtype = LuaTypeString
+		me.value = str
+		return str, true
+	default:
+		return "", false
+	}
 }
