@@ -1,5 +1,6 @@
 package api
 
+// LuaValue 老泪纵横
 type LuaValue struct {
 	vtype ELuaValueType
 	value interface{}
