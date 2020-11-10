@@ -14,32 +14,33 @@ func (me *LuaState) Type(index int) ELuaValueType {
 	return LuaTypeNone
 }
 
-// IsNone s
+// IsNone 判断指定索引处的值是否为None类型
 func (me *LuaState) IsNone(index int) bool {
 	return me.Type(index) == LuaTypeNone
 }
 
-// IsNil s
+// IsNil 判断指定索引处的值是否为Nil类型
 func (me *LuaState) IsNil(index int) bool {
 	return me.Type(index) == LuaTypeNil
 }
 
-// IsNoneOrNil s
+// IsNoneOrNil 判断指定索引处的值是否为None或者Nil类型
 func (me *LuaState) IsNoneOrNil(index int) bool {
 	return me.IsNone(index) || me.IsNil(index)
 }
 
-// IsBoolean s
+// IsBoolean 判断指定索引处的值是否为Boolean类型
 func (me *LuaState) IsBoolean(index int) bool {
 	return me.Type(index) == LuaTypeBoolean
 }
 
-// IsString s
+// IsString 判断指定索引处的值是否为String或者Number类型
 func (me *LuaState) IsString(index int) bool {
 	vtype := me.Type(index)
 	return vtype == LuaTypeString || vtype == LuaTypeNumber
 }
 
+// IsNumber 判断指定索引处的值是否为Number类型
 func (me *LuaState) IsNumber(index int) bool {
 	return true
 }
