@@ -3,6 +3,8 @@ package api
 import (
 	"fmt"
 	"strconv"
+
+	"../number"
 )
 
 // LuaValue Lua值
@@ -54,9 +56,16 @@ func (me *LuaValue) ToNumberX() (float64, bool) {
 
 // ToIntegerX 尝试取得int64的值
 func (me *LuaValue) ToIntegerX() (int64, bool) {
-	value := me.Value()
-	num, ok := value.(int64)
-	return num, ok
+	switch me.Type() {
+	case LuaTypeInteger:
+		return me.Value().(int64), true
+	case LuaTypeNumber:
+		return number.FloatToInteger(me.Value().(float64))
+	case LuaTypeString:
+		return number.TryParseInteger(me.Value().(string))
+	default:
+		return 0, false
+	}
 }
 
 // ToStringX s

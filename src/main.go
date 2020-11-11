@@ -5,6 +5,7 @@ import (
 	"log"
 	"math"
 	"os"
+	"strconv"
 
 	"./api"
 	"./chunk"
@@ -50,4 +51,7 @@ func main() {
 	state.List()
 
 	fmt.Println(math.Floor(5.0 / -3.0))
+
+	// fmt.Println(strconv.ParseInt("234.0", 10, 64))
+	fmt.Println(strconv.ParseFloat(".123s", 64))
 }
