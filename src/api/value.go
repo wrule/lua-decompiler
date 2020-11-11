@@ -1,6 +1,9 @@
 package api
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 // LuaValue Lua值
 type LuaValue struct {
@@ -41,6 +44,9 @@ func (me *LuaValue) ToNumberX() (float64, bool) {
 		return num, true
 	case LuaTypeNumber:
 		return me.Value().(float64), true
+	case LuaTypeString:
+		num, err := strconv.ParseFloat(me.Value().(string), 64)
+		return num, err == nil
 	default:
 		return float64(0), false
 	}
