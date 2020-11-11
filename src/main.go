@@ -54,4 +54,6 @@ func main() {
 
 	// fmt.Println(strconv.ParseInt("234.0", 10, 64))
 	fmt.Println(strconv.ParseFloat(".123s", 64))
+
+	fmt.Println("15" < "16")
 }
