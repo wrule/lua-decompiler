@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math"
 	"os"
 
 	"./api"
@@ -47,4 +48,6 @@ func main() {
 	state.List()
 	state.SetTop(-5)
 	state.List()
+
+	fmt.Println(math.Floor(5.0 / -3.0))
 }
