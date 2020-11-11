@@ -43,3 +43,10 @@ func ShiftRight(a, n int64) int64 {
 	}
 	return ShiftLeft(a, -n)
 }
+
+// FloatToInteger Lua浮点数转化为Lua整数
+func FloatToInteger(a float64) (int64, bool) {
+	i := int64(a)
+	// 转换成为float64，如果值一致则代表转换成功
+	return i, float64(i) == a
+}
