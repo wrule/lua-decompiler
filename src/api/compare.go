@@ -52,9 +52,51 @@ func compareEQ(a, b LuaValue) bool {
 }
 
 func compareLT(a, b LuaValue) bool {
-	return true
+	switch a.Type() {
+	case LuaTypeInteger:
+		switch b.Type() {
+		case LuaTypeInteger:
+			return a.Value().(int64) < b.Value().(int64)
+		case LuaTypeNumber:
+			return float64(a.Value().(int64)) < b.Value().(float64)
+		}
+	case LuaTypeNumber:
+		switch b.Type() {
+		case LuaTypeInteger:
+			return a.Value().(float64) < float64(b.Value().(int32))
+		case LuaTypeNumber:
+			return a.Value().(float64) < b.Value().(float64)
+		}
+	case LuaTypeString:
+		if y, ok := b.Value().(string); ok {
+			x := a.Value().(string)
+			return x < y
+		}
+	}
+	panic("比较运算符错误")
 }
 
 func compareLE(a, b LuaValue) bool {
-	return true
+	switch a.Type() {
+	case LuaTypeInteger:
+		switch b.Type() {
+		case LuaTypeInteger:
+			return a.Value().(int64) <= b.Value().(int64)
+		case LuaTypeNumber:
+			return float64(a.Value().(int64)) <= b.Value().(float64)
+		}
+	case LuaTypeNumber:
+		switch b.Type() {
+		case LuaTypeInteger:
+			return a.Value().(float64) <= float64(b.Value().(int32))
+		case LuaTypeNumber:
+			return a.Value().(float64) <= b.Value().(float64)
+		}
+	case LuaTypeString:
+		if y, ok := b.Value().(string); ok {
+			x := a.Value().(string)
+			return x <= y
+		}
+	}
+	panic("比较运算符错误")
 }
