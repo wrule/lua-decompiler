@@ -14,11 +14,41 @@ func (me *LuaState) Compare(index1, index2 int, op ECompareOpType) bool {
 	default:
 		panic("错误的比较运算符")
 	}
-	return false
 }
 
 func compareEQ(a, b LuaValue) bool {
-	return true
+	switch a.Type() {
+	case LuaTypeNil:
+		return b.Type() == LuaTypeNil
+	case LuaTypeBoolean:
+		x := a.Value().(bool)
+		y, ok := b.Value().(bool)
+		return ok && x == y
+	case LuaTypeString:
+		x := a.Value().(string)
+		y, ok := b.Value().(string)
+		return ok && x == y
+	case LuaTypeInteger:
+		switch b.Type() {
+		case LuaTypeInteger:
+			return a.Value() == b.Value()
+		case LuaTypeNumber:
+			return float64(a.Value().(int64)) == b.Value()
+		default:
+			return false
+		}
+	case LuaTypeNumber:
+		switch b.Type() {
+		case LuaTypeInteger:
+			return a.Value() == float64(b.Value().(int64))
+		case LuaTypeNumber:
+			return a.Value() == b.Value()
+		default:
+			return false
+		}
+	default:
+		return a.Value() == b.Value()
+	}
 }
 
 func compareLT(a, b LuaValue) bool {
