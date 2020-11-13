@@ -3,9 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
-	"math"
 	"os"
-	"strconv"
 
 	"./api"
 	"./chunk"
@@ -28,32 +26,20 @@ func main() {
 	ck.PrintList()
 	file.Close()
 
-	// fmt.Println(len(vm.InstructionInfos))
-
-	state := api.NewLuaState()
-	state.PushBoolean(true)
-	state.List()
-	state.PushInteger(10)
-	state.List()
-	state.PushNil()
-	state.List()
-	state.PushString("hello")
-	state.List()
-	state.PushValue(-4)
-	state.List()
-	state.Replace(3)
-	state.List()
-	state.SetTop(6)
-	state.List()
-	state.Remove(-3)
-	state.List()
-	state.SetTop(-5)
-	state.List()
-
-	fmt.Println(math.Floor(5.0 / -3.0))
-
-	// fmt.Println(strconv.ParseInt("234.0", 10, 64))
-	fmt.Println(strconv.ParseFloat(".123s", 64))
-
-	fmt.Println("15" < "16")
+	ls := api.NewLuaState()
+	ls.PushInteger(1)
+	ls.PushString("2.0")
+	ls.PushString("3.0")
+	ls.PushNumber(4.0)
+	ls.List()
+	ls.Arith(api.LuaOpADD)
+	ls.List()
+	ls.Arith(api.LuaOpBNOT)
+	ls.List()
+	ls.Len(2)
+	ls.List()
+	ls.Concat(3)
+	ls.List()
+	ls.PushBoolean(ls.Compare(1, 2, api.LuaOpEQ))
+	ls.List()
 }

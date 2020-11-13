@@ -1,10 +1,11 @@
 package api
 
 // Len 获取栈中值的长度
-func (me *LuaState) Len(index int) int {
+func (me *LuaState) Len(index int) {
 	value := me.stack.Get(index)
 	if str, ok := value.Value().(string); ok {
 		me.PushInteger(int64(len(str)))
+		return
 	}
 	panic("长度计算错误")
 }
@@ -19,7 +20,7 @@ func (me *LuaState) Concat(n int) {
 			if me.IsString(-1) {
 				value := me.stack.Pop()
 				str, _ := value.ToStringX()
-				result += str
+				result = str + result
 			} else {
 				panic("Concat连接错误")
 			}
