@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"./api"
 	"./chunk"
 )
 
@@ -26,20 +25,24 @@ func main() {
 	ck.PrintList()
 	file.Close()
 
-	ls := api.NewLuaState()
-	ls.PushInteger(1)
-	ls.PushString("2.0")
-	ls.PushString("3.0")
-	ls.PushNumber(4.0)
-	ls.List()
-	ls.Arith(api.LuaOpADD)
-	ls.List()
-	ls.Arith(api.LuaOpBNOT)
-	ls.List()
-	ls.Len(2)
-	ls.List()
-	ls.Concat(3)
-	ls.List()
-	ls.PushBoolean(ls.Compare(1, 2, api.LuaOpEQ))
-	ls.List()
+	// ls := api.NewLuaState()
+	// ls.PushInteger(1)
+	// ls.PushString("2.0")
+	// ls.PushString("3.0")
+	// ls.PushNumber(4.0)
+	// ls.List()
+	// ls.Arith(api.LuaOpADD)
+	// ls.List()
+	// ls.Arith(api.LuaOpBNOT)
+	// ls.List()
+	// ls.Len(2)
+	// ls.List()
+	// ls.Concat(3)
+	// ls.List()
+	// ls.PushBoolean(ls.Compare(1, 2, api.LuaOpEQ))
+	// ls.List()
+
+	nums := make([]int, 5, 10)
+	// nums[9] = 13
+	fmt.Println(nums, len(nums), cap(nums))
 }
