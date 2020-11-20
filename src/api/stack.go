@@ -6,6 +6,11 @@ type LuaStack struct {
 	top   int
 }
 
+// Top 获取栈顶位置索引（内部索引）
+func (me *LuaStack) Top() int {
+	return me.top
+}
+
 // Size 获取栈容量
 func (me *LuaStack) Size() int {
 	return len(me.slots)
