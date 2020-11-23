@@ -1,5 +1,7 @@
 package api
 
+import "fmt"
+
 // LuaTable 表实现
 type LuaTable struct {
 	lArray []LuaValue
@@ -26,4 +28,14 @@ func NewLuaTable(nArr, nRec int) *LuaTable {
 		result.lMap = make(map[string]LuaValue, nRec)
 	}
 	return result
+}
+
+// Print s
+func (me *LuaTable) Print() {
+	fmt.Println("array:")
+	fmt.Print("\t")
+	if me.tArray != nil {
+
+	}
+	fmt.Println("")
 }
